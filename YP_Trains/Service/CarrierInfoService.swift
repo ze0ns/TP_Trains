@@ -42,7 +42,7 @@ final class CarrierInfoService: CarrierInfoServiceProtocol {
             code: code,
             system: system,
             lang: lang,
-            format: nil
+            format: "json"
         ))
         return try response.ok.body.json
     }

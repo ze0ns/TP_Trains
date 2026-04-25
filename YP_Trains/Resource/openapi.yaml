@@ -445,12 +445,12 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+       "200":
          description: Успешный ответ
          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllStationsResponse'
+           text/html: # формат ответа
+             schema:
+               $ref: '#/components/schemas/AllStationsResponse'
 components:
   schemas:
     Stations:
@@ -705,8 +705,32 @@ components:
       type: object
       properties:
         copyright:
-          type: string
-          description: Текст копирайта
+          type: object
+          properties:
+            text:
+              type: string
+              description: Текст копирайта
+            url:
+              type: string
+              description: Ссылка на сайт
+            logo_vm:
+              type: string
+              description: HTML код вертикального монохромного логотипа
+            logo_vd:
+              type: string
+              description: HTML код вертикального темного логотипа
+            logo_hy:
+              type: string
+              description: HTML код горизонтального желтого логотипа
+            logo_hd:
+              type: string
+              description: HTML код горизонтального темного логотипа
+            logo_vy:
+              type: string
+              description: HTML код вертикального желтого логотипа
+            logo_hm:
+              type: string
+              description: HTML код горизонтального монохромного логотипа
     TicketsInfo:
       type: object
       properties:
@@ -875,6 +899,8 @@ components:
     CarrierResponse:
       type: object
       properties:
+        carrier:
+          $ref: '#/components/schemas/Carrier'
         carriers:
           type: array
           items:
@@ -934,4 +960,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Station'
+
+
 
