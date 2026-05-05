@@ -8,7 +8,7 @@
 import SwiftUI
 import OpenAPIURLSession
 
-struct ContentView: View {
+struct ServiceView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -231,5 +231,5 @@ func fetRouteStationsInfo() {
 }
 
 #Preview {
-    ContentView()
+    ServiceView()
 }
