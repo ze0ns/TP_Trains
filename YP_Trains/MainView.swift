@@ -18,7 +18,8 @@ struct MainView: View {
            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    ForEach(storiesItems) { item in
+                    ForEach(storiesItems.indices, id: \.self) { index in
+                        let item = storiesItems[index]                        
                         VStack() {
                             StoriesView(image: item.imageName, storiesText: item.storiesText)
                         }
@@ -26,22 +27,24 @@ struct MainView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                         .overlay {
                             RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.blue, lineWidth: 4)
+                                .stroke(Color.ypBlue, lineWidth: 4)
                         }
+                        .opacity(index >= 2 ? 0.5 : 1.0)
                     }
                 }
-                .padding(.top,3)
+                .padding(.top, 3)
                 .padding(.horizontal, 16)
                 .padding(.bottom)
             }
             .padding(.top, 24)
+            
             RouteSelectionView()
                 .padding(.top, 44)
+            
+            Spacer()
         }
-        Spacer()
     }
 }
-
 #Preview {
     MainView()
 }
