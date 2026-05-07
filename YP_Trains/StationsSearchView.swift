@@ -19,11 +19,11 @@ struct StationsSearchView: View {
         StationsModel(name: "Белорусский вокзал"), StationsModel(name: "Савеловский вокзал"), StationsModel(name: "Ленинградский вокзал")
 
     ]
-    var filteredStations: [String] {
+    var filteredStations: [StationsModel] {
         if searchText.isEmpty {
-            return allStations.map { $0.name }
+            return allStations
         } else {
-            return allStations.filter { $0.name.localizedCaseInsensitiveContains(searchText) } as! [String]
+            return allStations.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
@@ -48,14 +48,14 @@ struct StationsSearchView: View {
                 .padding(.bottom, 8)
                 
                 // Список станций
-                List(filteredStations, id: \.self) { station in
+                List(filteredStations) { station in
                     Button(action: {
                         // Формируем итоговую строку: "Город, Станция"
-                        let finalText = "\(cityName), \(station)"
+                        let finalText = "\(cityName), \(station.name)"
                         onStationSelected(finalText)
                     }) {
                         HStack {
-                            Text(station)
+                            Text(station.name)
                         }
                         .padding(.vertical, 4)
                     }

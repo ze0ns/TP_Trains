@@ -14,14 +14,12 @@ struct CitySearchView: View {
     @State private var searchText = ""
     
     let allCities = [
-        "Москва", "Санкт-Петербург", "Новосибирск",
-        "Екатеринбург", "Казань", "Нижний Новгород",
-        "Челябинск", "Самара", "Омск", "Ростов-на-Дону"
+      CityModel(name: "Москва"), CityModel(name: "Санкт-Петербург"), CityModel(name: "Краснодар"), CityModel(name: "Казань"), CityModel(name: "Пермь"),  CityModel(name: "Екатеренбург"),  CityModel(name: "Сочи")
     ]
     
-    var filteredCities: [String] {
+    var filteredCities: [CityModel] {
         if searchText.isEmpty { return allCities }
-        return allCities.filter { $0.localizedCaseInsensitiveContains(searchText) }
+        return allCities.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
     }
     
     var body: some View {
@@ -45,12 +43,12 @@ struct CitySearchView: View {
             .padding(.bottom, 8)
             
             // Список городов
-            List(filteredCities, id: \.self) { city in
+            List(filteredCities) { city in
                 NavigationLink {
-                    StationsSearchView(cityName: city, onStationSelected: onStationSelected)
+                    StationsSearchView(cityName: city.name, onStationSelected: onStationSelected)
                 } label: {
                     HStack {
-                        Text(city)
+                        Text(city.name)
                     }
                     .padding(.vertical, 4)
                 }
