@@ -18,7 +18,7 @@ struct SplashScreen: View {
                     .ignoresSafeArea()
             }.onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0){
-                    MainView()
+                    TrainsTabView()
                 }
             }
     }

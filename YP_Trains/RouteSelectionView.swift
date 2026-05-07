@@ -8,35 +8,57 @@
 
 import SwiftUI
 
+import SwiftUI
+
+enum ActiveField: Identifiable {
+    case from, to
+    
+    var id: String { self == .from ? "from" : "to" }
+}
+
 struct RouteSelectionView: View {
-    @State private var fromText: String = ""
-    @State private var toText: String = ""
+    @State private var fromText: String = "Откуда"
+    @State private var toText: String = "Куда"
+    
+    @State private var activeField: ActiveField?
     
     var body: some View {
-       
+     
         HStack(spacing: 0) {
             
-      
             VStack(spacing: 0) {
-                HStack {
-                    TextField("Откуда", text: $fromText)
-                        .font(.system(size: 16))
-                    Spacer()
+               
+                Button {
+                    activeField = .from
+                } label: {
+                    HStack {
+                        Text(fromText)
+                            .font(.system(size: 16))
+                            .foregroundColor(.black)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 16)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 16)
-                
+                .buttonStyle(.plain)
                 
                 Divider()
                     .padding(.leading, 16)
                 
-                HStack {
-                    TextField("Куда", text: $toText)
-                        .font(.system(size: 16))
-                    Spacer()
+                // Кнопка "Куда"
+                Button {
+                    activeField = .to
+                } label: {
+                    HStack {
+                        Text(toText)
+                            .font(.system(size: 16))
+                            .foregroundColor(.black)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 16)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 16)
+                .buttonStyle(.plain)
             }
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -73,10 +95,22 @@ struct RouteSelectionView: View {
                 .stroke(Color.blue, lineWidth: 1.5)
         )
         .padding(.horizontal, 16)
+       
+        .sheet(item: $activeField) { field in
+            NavigationStack {
+                CitySearchView(onStationSelected: { selectedStation in
+                    if field == .from {
+                        fromText = selectedStation
+                    } else {
+                        toText = selectedStation
+                    }
+                    
+                    activeField = nil
+                })
+            }
+        }
     }
 }
-
-
 #Preview {
     ZStack {
         Color(UIColor.systemGray6).ignoresSafeArea()

@@ -40,8 +40,8 @@ struct MainView: View {
             
             RouteSelectionView()
                 .padding(.top, 44)
-            
             Spacer()
+ 
         }
     }
 }
