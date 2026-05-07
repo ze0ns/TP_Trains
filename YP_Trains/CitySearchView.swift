@@ -24,7 +24,6 @@ struct CitySearchView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Строка поиска
             HStack {
                 Image(systemName: "magnifyingglass").foregroundColor(.gray)
                 TextField("Поиск города...", text: $searchText)
@@ -39,31 +38,30 @@ struct CitySearchView: View {
             .background(Color(.systemGray6))
             .cornerRadius(10)
             .padding(.horizontal, 16)
-            .padding(.top, 16)
             .padding(.bottom, 8)
             
-            // Список городов
-            List(filteredCities) { city in
-                NavigationLink {
-                    StationsSearchView(cityName: city.name, onStationSelected: onStationSelected)
-                } label: {
-                    HStack {
-                        Text(city.name)
-                    }
-                    .padding(.vertical, 4)
-                }
-            }
-            .listStyle(PlainListStyle())
-            .scrollDismissesKeyboard(.interactively)
-            
             if filteredCities.isEmpty {
-                Spacer()
                 Text("Город не найден")
-                    .foregroundColor(.gray)
-                Spacer()
+                    .font(.title.bold())
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                List(filteredCities) { city in
+                    NavigationLink {
+                        StationsSearchView(cityName: city.name, onStationSelected: onStationSelected)
+                    } label: {
+                        HStack {
+                            Text(city.name)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .scrollDismissesKeyboard(.interactively)
             }
         }
         .navigationTitle("Выбор города")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -28,29 +28,31 @@ struct StationsSearchView: View {
     }
     
     var body: some View {
-            VStack(spacing: 0) {
-                // Строка поиска
-                HStack {
-                    Image(systemName: "magnifyingglass").foregroundColor(.gray)
-                    TextField("Поиск станции...", text: $searchText)
-                        .textFieldStyle(PlainTextFieldStyle())
-                    if !searchText.isEmpty {
-                        Button(action: { searchText = "" }) {
-                            Image(systemName: "xmark.circle.fill").foregroundColor(.gray)
-                        }
+        VStack(spacing: 0) {
+            HStack {
+                Image(systemName: "magnifyingglass").foregroundColor(.gray)
+                TextField("Поиск станции...", text: $searchText)
+                    .textFieldStyle(PlainTextFieldStyle())
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill").foregroundColor(.gray)
                     }
                 }
-                .padding(10)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-                .padding(.bottom, 8)
-                
-                // Список станций
+            }
+            .padding(10)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 8)
+            
+            if filteredStations.isEmpty {
+                Text("Станция не найдена")
+                    .font(.title.bold())
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
                 List(filteredStations) { station in
                     Button(action: {
-                        // Формируем итоговую строку: "Город, Станция"
                         let finalText = "\(cityName), \(station.name)"
                         onStationSelected(finalText)
                     }) {
@@ -63,16 +65,11 @@ struct StationsSearchView: View {
                 }
                 .listStyle(PlainListStyle())
                 .scrollDismissesKeyboard(.interactively)
-                
-                if filteredStations.isEmpty {
-                    Spacer()
-                    Text("Станция не найдена")
-                        .foregroundColor(.gray)
-                    Spacer()
-                }
             }
-            .navigationTitle("Станции: \(cityName)")
         }
+        .navigationTitle("Выбор станции")
+        .navigationBarTitleDisplayMode(.inline)
+    }
 }
 
 #Preview {
