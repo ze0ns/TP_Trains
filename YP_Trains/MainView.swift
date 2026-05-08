@@ -12,14 +12,26 @@ struct MainView: View {
                         StoriesItem(imageName: "2", storiesText: "Новость 2"),
                         StoriesItem(imageName: "3", storiesText: "Новость 3"),
                         StoriesItem(imageName: "4", storiesText: "Новость 4")]
-
+    
+  
+    @State private var fromText: String = "Откуда"
+    @State private var toText: String = "Куда"
+    
+    
+    @State private var showTransporter = false
+    @State private var routeTrains: String = ""
+  
+    var isFormFilled: Bool {
+        fromText != "Откуда" && toText != "Куда"
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(storiesItems.indices, id: \.self) { index in
-                        let item = storiesItems[index]                        
+                        let item = storiesItems[index]
                         VStack() {
                             StoriesView(image: item.imageName, storiesText: item.storiesText)
                         }
@@ -38,11 +50,38 @@ struct MainView: View {
             }
             .padding(.top, 24)
             
-            RouteSelectionView()
+            RouteSelectionView(fromText: $fromText, toText: $toText)
                 .padding(.top, 44)
-            Spacer()
- 
+         
+         
+            
+            if isFormFilled {
+                Button(action: {
+                    routeTrains = fromText + " - " + toText
+                    print(routeTrains)
+                    showTransporter = true
+                }) {
+                    Text("Найти")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(width: 150, height: 60)
+                        .background(Color.ypBlue)
+                        .cornerRadius(16)
+                }
+                .padding(.top, 20)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 90)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
+       
+        .sheet(isPresented: $showTransporter) {
+           
+            TrainScheduleView(routeTrains: $routeTrains)
+        }
+        .animation(.easeInOut(duration: 0.3), value: isFormFilled)
+        Spacer()
+        
     }
 }
 #Preview {

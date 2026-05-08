@@ -12,11 +12,11 @@ struct TrainsTabView: View {
     
     var body: some View {
         ZStack {
-            // 1. Контент вкладок
             Group {
                 if selectedTab == 0 {
                     ZStack {
                         MainView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     }
                 } else {
                     ZStack {
@@ -27,8 +27,8 @@ struct TrainsTabView: View {
                     }
                 }
             }
+
             
-           
             VStack {
                 Spacer()
                 Rectangle()

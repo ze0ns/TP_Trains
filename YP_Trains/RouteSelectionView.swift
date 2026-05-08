@@ -12,13 +12,12 @@ import SwiftUI
 
 enum ActiveField: Identifiable {
     case from, to
-    
     var id: String { self == .from ? "from" : "to" }
 }
 
 struct RouteSelectionView: View {
-    @State private var fromText: String = "Откуда"
-    @State private var toText: String = "Куда"
+    @Binding var fromText: String
+    @Binding var toText: String
     
     @State private var activeField: ActiveField?
     
@@ -114,6 +113,6 @@ struct RouteSelectionView: View {
 #Preview {
     ZStack {
         Color(UIColor.systemGray6).ignoresSafeArea()
-        RouteSelectionView()
+        RouteSelectionView(fromText: .constant("Откуда"), toText: .constant("Куда"))
     }
 }
