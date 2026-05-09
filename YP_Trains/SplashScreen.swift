@@ -8,19 +8,25 @@
 import SwiftUI
 
 struct SplashScreen: View {
+    @State private var isActive = true
     var body: some View {
-        Color.black
-            .ignoresSafeArea()
-            .overlay {
-                Image(.splashScreen)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea()
-            }.onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0){
-                    TrainsTabView()
+        if isActive {
+            Color.black
+                .ignoresSafeArea()
+                .overlay {
+                    Image(.splashScreen)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .ignoresSafeArea()
                 }
-            }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                        isActive = false
+                    }
+                }
+        } else {
+            TrainsTabView()
+        }
     }
 }
 

@@ -15,7 +15,7 @@ struct TrainsTabView: View {
             Group {
                 if selectedTab == 0 {
                     ZStack {
-                        MainView()
+                        TrainsSchedulerView()
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     }
                 } else {

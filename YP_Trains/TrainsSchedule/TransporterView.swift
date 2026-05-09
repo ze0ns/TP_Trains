@@ -11,18 +11,18 @@ import SwiftUI
 struct TrainScheduleView: View {
     // Моковые данные для расписания
     let trains: [TrainScheduleModel] = [
-        TrainScheduleModel(operatorName: "РЖД", iconName: "rzd",transportDate: "15 февраля", departureTime: "22:30", arrivalTime: "08:15", duration: "9 ч 45 мин") ,
-        TrainScheduleModel(operatorName: "ФГК",iconName: "ural",transportDate: "16 февраля", departureTime: "23:00", arrivalTime: "08:15", duration: "9 ч 15 мин"),
-        TrainScheduleModel(operatorName: "Урал логистика", iconName: "fgk",transportDate: "17 февраля", departureTime: "23:55", arrivalTime: "09:30", duration: "9 ч 35 мин"),
-        TrainScheduleModel(operatorName: "РЖД", iconName: "ural",transportDate: "18 февраля", departureTime: "00:10", arrivalTime: "08:40", duration: "8 ч 30 мин")
+        TrainScheduleModel(operatorName: "РЖД", iconName: "rzd", transferName: "С пересадкой в Костроме",transportDate: "15 февраля", departureTime: "22:30", arrivalTime: "08:15", duration: "9 ч 45 мин") ,
+        TrainScheduleModel(operatorName: "ФГК",iconName: "ural", transferName: "С пересадкой в Москве",transportDate: "16 февраля", departureTime: "23:00", arrivalTime: "08:15", duration: "9 ч 15 мин"),
+        TrainScheduleModel(operatorName: "Урал логистика", iconName: "fgk", transferName: nil, transportDate: "17 февраля", departureTime: "23:55", arrivalTime: "09:30", duration: "9 ч 35 мин"),
+        TrainScheduleModel(operatorName: "РЖД", iconName: "ural", transferName: nil, transportDate: "18 февраля", departureTime: "00:10", arrivalTime: "08:40", duration: "8 ч 30 мин")
     ]
-    
+    @State private var showFilter  = false
+
     @Binding var routeTrains: String
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Фон
-            Color(UIColor.systemGray6).edgesIgnoringSafeArea(.all)
+            Color(UIColor.white).edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 0) {
                 // MARK: - Заголовок
@@ -45,7 +45,6 @@ struct TrainScheduleView: View {
                     }
                     .padding(.top, 40)
                     .padding(.horizontal, 16)
-                    // Отступ снизу, чтобы кнопка не перекрывала контент
                     .padding(.bottom, 100)
                 }
             }
@@ -53,7 +52,7 @@ struct TrainScheduleView: View {
             // MARK: - Нижняя кнопка
             VStack {
                 Button(action: {
-                    print("Уточнить время нажата")
+                    showFilter = true
                 }) {
                     Text("Уточнить время")
                         .font(.system(size: 17, weight: .bold))
@@ -64,9 +63,13 @@ struct TrainScheduleView: View {
                         .cornerRadius(16)
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 16) // Учитываем safe area
+                .padding(.bottom, 16)
+    
             }
-            .background(.ultraThinMaterial) // Размытый фон под кнопкой как в реальных приложениях
+            .background(.ultraThinMaterial)
+        }
+        .sheet(isPresented: $showFilter){
+            RouteFilterView()
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

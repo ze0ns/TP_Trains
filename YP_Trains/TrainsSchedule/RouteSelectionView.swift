@@ -44,7 +44,6 @@ struct RouteSelectionView: View {
                 Divider()
                     .padding(.leading, 16)
                 
-                // Кнопка "Куда"
                 Button {
                     activeField = .to
                 } label: {

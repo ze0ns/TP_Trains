@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct TrainsSchedulerView: View {
     let storiesItems = [StoriesItem(imageName: "1", storiesText: "Новость 1"),
                         StoriesItem(imageName: "2", storiesText: "Новость 2"),
                         StoriesItem(imageName: "3", storiesText: "Новость 3"),
@@ -85,5 +85,5 @@ struct MainView: View {
     }
 }
 #Preview {
-    MainView()
+    TrainsSchedulerView()
 }

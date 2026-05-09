@@ -11,6 +11,7 @@ struct TrainScheduleModel: Identifiable {
     let id = UUID()
     let operatorName: String
     let iconName: String
+    let transferName: String?
     let transportDate: String
     let departureTime: String
     let arrivalTime: String
