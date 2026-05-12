@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 enum ActiveField: Identifiable {
     case from, to
     var id: String { self == .from ? "from" : "to" }
@@ -22,11 +20,9 @@ struct RouteSelectionView: View {
     @State private var activeField: ActiveField?
     
     var body: some View {
-     
         HStack(spacing: 0) {
             
             VStack(spacing: 0) {
-               
                 Button {
                     activeField = .from
                 } label: {
@@ -93,8 +89,8 @@ struct RouteSelectionView: View {
                 .stroke(Color.blue, lineWidth: 1.5)
         )
         .padding(.horizontal, 16)
-       
-        .sheet(item: $activeField) { field in
+        
+        .fullScreenCover(item: $activeField) { field in
             NavigationStack {
                 CitySearchView(onStationSelected: { selectedStation in
                     if field == .from {
@@ -102,9 +98,21 @@ struct RouteSelectionView: View {
                     } else {
                         toText = selectedStation
                     }
-                    
                     activeField = nil
                 })
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            activeField = nil
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 17, weight: .semibold))
+                            }
+                            .foregroundColor(.black)
+                        }
+                    }
+                }
             }
         }
     }
