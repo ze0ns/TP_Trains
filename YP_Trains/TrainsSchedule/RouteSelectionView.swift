@@ -29,7 +29,7 @@ struct RouteSelectionView: View {
                     HStack {
                         Text(fromText)
                             .font(.system(size: 16))
-                            .foregroundColor(.black)
+                            .foregroundColor(fromText == "Откуда" ? .secondary : .primary)
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -46,7 +46,7 @@ struct RouteSelectionView: View {
                     HStack {
                         Text(toText)
                             .font(.system(size: 16))
-                            .foregroundColor(.black)
+                            .foregroundColor(toText == "Куда" ? .secondary : .primary)
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -54,11 +54,12 @@ struct RouteSelectionView: View {
                 }
                 .buttonStyle(.plain)
             }
-            .background(Color.white)
+
+            .background(Color.ypCardBackground)
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.white, lineWidth: 1.5)
+                    .stroke(Color.primary.opacity(0.1), lineWidth: 1.5)
             )
             .padding(.leading, 16)
             .padding(.vertical, 16)
@@ -74,19 +75,19 @@ struct RouteSelectionView: View {
             }) {
                 Image(.сhange)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.blue)
+                    .foregroundColor(.adaptiveYpBlue)
                     .frame(width: 36, height: 36)
-                    .background(Color.white)
+                    .background(Color.ypCardBackground)
                     .clipShape(Circle())
             }
             .padding(.trailing, 16)
             .padding(.leading, 16)
         }
-        .background(Color.ypBlue)
+        .background(Color.adaptiveYpBlue)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.blue, lineWidth: 1.5)
+                .stroke(Color.adaptiveYpBlue.opacity(0.8), lineWidth: 1.5)
         )
         .padding(.horizontal, 16)
         
@@ -108,11 +109,14 @@ struct RouteSelectionView: View {
                             HStack(spacing: 4) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 17, weight: .semibold))
+                                Text("Назад")
+                                    .font(.system(size: 17))
                             }
-                            .foregroundColor(.black)
+                            .foregroundColor(.adaptiveYpBlue)
                         }
                     }
                 }
+                .background(Color.ypMainBackground)
             }
         }
     }

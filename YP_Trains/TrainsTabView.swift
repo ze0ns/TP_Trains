@@ -20,7 +20,7 @@ struct TrainsTabView: View {
                     }
                 } else {
                     ZStack {
-                        Color.blue.ignoresSafeArea()
+                        Color.white.ignoresSafeArea()
                         Text("Вью с настройками")
                             .font(.largeTitle)
                             .foregroundColor(.white)

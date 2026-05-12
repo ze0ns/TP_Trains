@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct TrainScheduleView: View {
+struct TransporterView: View {
     // Моковые данные для расписания
     let trains: [TrainScheduleModel] = [
         TrainScheduleModel(operatorName: "РЖД", iconName: "rzd", transferName: "С пересадкой в Костроме",transportDate: "15 февраля", departureTime: "22:30", arrivalTime: "08:15", duration: "9 ч 45 мин") ,
@@ -86,7 +86,7 @@ struct TrainScheduleView: View {
 
 #Preview {
     NavigationView {
-        TrainScheduleView(routeTrains: .constant("Москва — Санкт-Петербург"))
+        TransporterView(routeTrains: .constant("Москва — Санкт-Петербург"))
     }
 }
 

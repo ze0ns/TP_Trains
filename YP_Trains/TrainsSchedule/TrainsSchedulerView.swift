@@ -13,77 +13,84 @@ struct TrainsSchedulerView: View {
                         StoriesItem(imageName: "3", storiesText: "Новость 3"),
                         StoriesItem(imageName: "4", storiesText: "Новость 4")]
     
-  
     @State private var fromText: String = "Откуда"
     @State private var toText: String = "Куда"
     
-    
     @State private var showTransporter = false
     @State private var routeTrains: String = ""
-  
+    
     var isFormFilled: Bool {
         fromText != "Откуда" && toText != "Куда"
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-           
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(storiesItems.indices, id: \.self) { index in
-                        let item = storiesItems[index]
-                        VStack() {
-                            StoriesView(image: item.imageName, storiesText: item.storiesText)
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 0) {
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach(storiesItems.indices, id: \.self) { index in
+                            let item = storiesItems[index]
+                            VStack() {
+                                StoriesView(image: item.imageName, storiesText: item.storiesText)
+                            }
+                            .frame(width: 92, height: 140)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color.adaptiveYpBlue, lineWidth: 4)
+                            }
+                            .opacity(index >= 2 ? 0.5 : 1.0)
                         }
-                        .frame(width: 92, height: 140)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.ypBlue, lineWidth: 4)
-                        }
-                        .opacity(index >= 2 ? 0.5 : 1.0)
                     }
+                    .padding(.top, 3)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom)
                 }
-                .padding(.top, 3)
-                .padding(.horizontal, 16)
-                .padding(.bottom)
+                .padding(.top, 24)
+                
+                RouteSelectionView(fromText: $fromText, toText: $toText)
+                    .padding(.top, 44)
+                
+                if isFormFilled {
+                    Button(action: {
+                        routeTrains = fromText + " - " + toText
+                        print(routeTrains)
+                        showTransporter = true
+                    }) {
+                        Text("Найти")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 150, height: 60)
+                            // АДАПТАЦИЯ: фон кнопки
+                            .background(Color.adaptiveYpBlue)
+                            .cornerRadius(16)
+                    }
+                    .padding(.top, 16)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 40)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+                
+                Spacer()
             }
-            .padding(.top, 24)
-            
-            RouteSelectionView(fromText: $fromText, toText: $toText)
-                .padding(.top, 44)
-         
-         
-            
-            if isFormFilled {
-                Button(action: {
-                    routeTrains = fromText + " - " + toText
-                    print(routeTrains)
-                    showTransporter = true
-                }) {
-                    Text("Найти")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 150, height: 60)
-                        .background(Color.ypBlue)
-                        .cornerRadius(16)
+            .background(Color.ypMainBackground)
+            .navigationDestination(isPresented: $showTransporter) {
+                TransporterView(routeTrains: $routeTrains)
+            }
+            .animation(.easeInOut(duration: 0.3), value: isFormFilled)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Поиск поездов")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.primary)
                 }
-                .padding(.top, 20)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 90)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-       
-        .sheet(isPresented: $showTransporter) {
-           
-            TrainScheduleView(routeTrains: $routeTrains)
-        }
-        .animation(.easeInOut(duration: 0.3), value: isFormFilled)
-        Spacer()
-        
     }
 }
+
 #Preview {
     TrainsSchedulerView()
 }

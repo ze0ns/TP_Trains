@@ -53,7 +53,7 @@ struct StationsSearchView: View {
             } else {
                 List(filteredStations) { station in
                     Button(action: {
-                        let finalText = "\(cityName), \(station.name)"
+                        let finalText = "\(cityName) (\(station.name))"
                         onStationSelected(finalText)
                     }) {
                         HStack {
