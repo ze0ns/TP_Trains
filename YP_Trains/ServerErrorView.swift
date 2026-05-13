@@ -17,7 +17,7 @@ struct ServerErrorView: View {
                 .frame(width: 233,height: 233)
             Text("Ошибка сервера")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.black)
+                .foregroundColor(.mainTextColor)
         }
     }
 }

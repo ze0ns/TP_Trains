@@ -34,7 +34,7 @@ struct RouteFilterView: View {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Время отправления")
                             .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.tabColor)
+                            .foregroundColor(.mainTextColor)
                             .padding(.top, 16)
                             .padding(.leading, 16)
                         
@@ -55,7 +55,7 @@ struct RouteFilterView: View {
                         VStack(alignment: .leading, spacing: 16) {
                             Text("Показывать варианты с пересадками")
                                 .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(Color.tabColor)
+                                .foregroundColor(Color.mainTextColor)
                             
                             VStack(alignment: .leading, spacing: 24) {
                                 RadioButtonView(title: "Да", isSelected: showTransfers) {

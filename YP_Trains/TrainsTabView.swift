@@ -20,14 +20,11 @@ struct TrainsTabView: View {
                     }
                 } else {
                     ZStack {
-                        Color.white.ignoresSafeArea()
-                        Text("Вью с настройками")
-                            .font(.largeTitle)
-                            .foregroundColor(.white)
+                        ServerErrorView()
                     }
                 }
             }
-
+            
             
             VStack {
                 Spacer()
@@ -40,7 +37,7 @@ struct TrainsTabView: View {
                         selectedTab = 0
                     }) {
                         Label("", image: .schedule)
-                            .foregroundColor(selectedTab == 0 ? .tabColor : .gray)
+                            .foregroundColor(selectedTab == 0 ? .mainTextColor : .gray)
                             .frame(maxWidth: .infinity)
                     }
                     
@@ -48,7 +45,7 @@ struct TrainsTabView: View {
                         selectedTab = 1
                     }) {
                         Label("", image: .settings)
-                            .foregroundColor(selectedTab == 1 ? .tabColor : .gray)
+                            .foregroundColor(selectedTab == 1 ? .mainTextColor : .gray)
                             .frame(maxWidth: .infinity)
                     }
                 }

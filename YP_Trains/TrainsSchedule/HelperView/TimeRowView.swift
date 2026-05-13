@@ -17,10 +17,10 @@ struct TimeRowView: View {
             HStack(spacing: 2) {
                 Text(title)
                     .font(.system(size: 17, weight: .medium))
-                    .foregroundColor(.tabColor)
+                    .foregroundColor(.mainTextColor)
                 Text(subtitle)
-                    .font(.system(size: 13))
-                    .foregroundColor(.tabColor)
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundColor(.mainTextColor)
             }
             Spacer()
             Image(systemName: isSelected ? "checkmark.square.fill" : "square")

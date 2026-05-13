@@ -20,7 +20,7 @@ struct RadioButtonView: View {
                     .foregroundColor(isSelected ? Color.ypBlue : Color.gray.opacity(0.4))
                 Text(title)
                     .font(.system(size: 17))
-                    .foregroundColor(.black)
+                    .foregroundColor(.mainTextColor)
             }
         }
     }

@@ -17,7 +17,7 @@ struct NoInternetView: View {
                 .frame(width: 233,height: 233)
             Text("Нет интернета")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.black)
+                .foregroundColor(.mainTextColor)
         }
     }
 }

@@ -17,7 +17,7 @@ extension Color {
         }
     })
     
-    static let tabColor: Color = Color(UIColor { traitCollection in
+    static let mainTextColor: Color = Color(UIColor { traitCollection in
         switch traitCollection.userInterfaceStyle {
         case .dark:
                 .ypBlackNight

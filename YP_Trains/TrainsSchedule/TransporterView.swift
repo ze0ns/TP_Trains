@@ -32,7 +32,7 @@ struct TransporterView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(routeTrains)
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(Color.tabColor)
+                            .foregroundColor(Color.mainTextColor)
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
