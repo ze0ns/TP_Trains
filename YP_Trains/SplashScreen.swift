@@ -20,7 +20,7 @@ struct SplashScreen: View {
                         .ignoresSafeArea()
                 }
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         isActive = false
                     }
                 }

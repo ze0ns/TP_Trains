@@ -38,7 +38,7 @@ struct TrainsSchedulerView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.adaptiveYpBlue, lineWidth: 4)
+                                    .stroke(Color.ypBlue, lineWidth: 4)
                             }
                             .opacity(index >= 2 ? 0.5 : 1.0)
                         }
@@ -63,7 +63,7 @@ struct TrainsSchedulerView: View {
                             .foregroundColor(.white)
                             .frame(width: 150, height: 60)
                             // АДАПТАЦИЯ: фон кнопки
-                            .background(Color.adaptiveYpBlue)
+                            .background(Color.ypBlue)
                             .cornerRadius(16)
                     }
                     .padding(.top, 16)
@@ -74,7 +74,7 @@ struct TrainsSchedulerView: View {
                 
                 Spacer()
             }
-            .background(Color.ypMainBackground)
+            .background(Color.backgroundColor)
             .navigationDestination(isPresented: $showTransporter) {
                 TransporterView(routeTrains: $routeTrains)
             }

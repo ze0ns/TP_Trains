@@ -29,7 +29,7 @@ struct RouteSelectionView: View {
                     HStack {
                         Text(fromText)
                             .font(.system(size: 16))
-                            .foregroundColor(fromText == "Откуда" ? .secondary : .primary)
+                            .foregroundColor(fromText == "Откуда" ? .ypGrayUni : .primary)
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -46,7 +46,7 @@ struct RouteSelectionView: View {
                     HStack {
                         Text(toText)
                             .font(.system(size: 16))
-                            .foregroundColor(toText == "Куда" ? .secondary : .primary)
+                            .foregroundColor(toText == "Куда" ? .ypGrayUni : .primary)
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -75,7 +75,7 @@ struct RouteSelectionView: View {
             }) {
                 Image(.сhange)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.adaptiveYpBlue)
+                    .foregroundColor(.ypBlue)
                     .frame(width: 36, height: 36)
                     .background(Color.ypCardBackground)
                     .clipShape(Circle())
@@ -83,11 +83,11 @@ struct RouteSelectionView: View {
             .padding(.trailing, 16)
             .padding(.leading, 16)
         }
-        .background(Color.adaptiveYpBlue)
+        .background(Color.ypBlue)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.adaptiveYpBlue.opacity(0.8), lineWidth: 1.5)
+                .stroke(Color.ypBlue.opacity(0.8), lineWidth: 1.5)
         )
         .padding(.horizontal, 16)
         
@@ -112,11 +112,11 @@ struct RouteSelectionView: View {
                                 Text("Назад")
                                     .font(.system(size: 17))
                             }
-                            .foregroundColor(.adaptiveYpBlue)
+                            .foregroundColor(.ypBlue)
                         }
                     }
                 }
-                .background(Color.ypMainBackground)
+                .background(Color.backgroundColor)
             }
         }
     }

@@ -30,12 +30,12 @@ struct CitySearchView: View {
                     .textFieldStyle(PlainTextFieldStyle())
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
-                        Image(systemName: "xmark.circle.fill").foregroundColor(.gray)
+                        Image(systemName: "xmark.circle.fill").foregroundColor(.textCityColor)
                     }
                 }
             }
             .padding(10)
-            .background(Color(.systemGray6))
+            .background(Color(.ypSearchBg))
             .cornerRadius(10)
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
@@ -43,7 +43,7 @@ struct CitySearchView: View {
             if filteredCities.isEmpty {
                 Text("Город не найден")
                     .font(.title.bold())
-                    .foregroundColor(.black)
+                    .foregroundColor(.textCitySearchColor)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List(filteredCities) { city in

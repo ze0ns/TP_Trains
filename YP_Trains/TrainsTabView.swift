@@ -32,7 +32,7 @@ struct TrainsTabView: View {
             VStack {
                 Spacer()
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color.tabLineColor)
                     .frame(height: 2)
                 
                 HStack(spacing: 0) {
@@ -40,7 +40,7 @@ struct TrainsTabView: View {
                         selectedTab = 0
                     }) {
                         Label("", image: .schedule)
-                            .foregroundColor(selectedTab == 0 ? .black : .gray)
+                            .foregroundColor(selectedTab == 0 ? .tabColor : .gray)
                             .frame(maxWidth: .infinity)
                     }
                     
@@ -48,13 +48,13 @@ struct TrainsTabView: View {
                         selectedTab = 1
                     }) {
                         Label("", image: .settings)
-                            .foregroundColor(selectedTab == 1 ? .black : .gray)
+                            .foregroundColor(selectedTab == 1 ? .tabColor : .gray)
                             .frame(maxWidth: .infinity)
                     }
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 20)
-                .background(Color(UIColor.systemBackground))
+                .background(Color.backgroundColor)
             }
         }
     }

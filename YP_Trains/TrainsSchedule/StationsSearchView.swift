@@ -35,7 +35,7 @@ struct StationsSearchView: View {
                     .textFieldStyle(PlainTextFieldStyle())
                 if !searchText.isEmpty {
                     Button(action: { searchText = "" }) {
-                        Image(systemName: "xmark.circle.fill").foregroundColor(.gray)
+                        Image(systemName: "xmark.circle.fill").foregroundColor(.textCityColor)
                     }
                 }
             }
@@ -48,7 +48,7 @@ struct StationsSearchView: View {
             if filteredStations.isEmpty {
                 Text("Станция не найдена")
                     .font(.title.bold())
-                    .foregroundColor(.black)
+                    .foregroundColor(.textCitySearchColor)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List(filteredStations) { station in
