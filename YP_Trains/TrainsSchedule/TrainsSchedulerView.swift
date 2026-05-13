@@ -62,7 +62,7 @@ struct TrainsSchedulerView: View {
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(.white)
                             .frame(width: 150, height: 60)
-                            // АДАПТАЦИЯ: фон кнопки
+                            
                             .background(Color.ypBlue)
                             .cornerRadius(16)
                     }
@@ -80,13 +80,6 @@ struct TrainsSchedulerView: View {
             }
             .animation(.easeInOut(duration: 0.3), value: isFormFilled)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Поиск поездов")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(.primary)
-                }
-            }
         }
     }
 }

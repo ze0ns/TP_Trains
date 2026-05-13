@@ -12,6 +12,7 @@ struct CitySearchView: View {
     let onStationSelected: (String) -> Void // Переименовали замыкание
     
     @State private var searchText = ""
+    @Environment(\.dismiss) private var dismiss
     
     let allCities = [
       CityModel(name: "Москва"), CityModel(name: "Санкт-Петербург"), CityModel(name: "Краснодар"), CityModel(name: "Казань"), CityModel(name: "Пермь"),  CityModel(name: "Екатеренбург"),  CityModel(name: "Сочи")
@@ -60,8 +61,21 @@ struct CitySearchView: View {
                 .scrollDismissesKeyboard(.interactively)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationTitle("Выбор города")
         .navigationBarTitleDisplayMode(.inline)
+        
+        .toolbar {
+             ToolbarItem(placement: .navigationBarLeading) {
+                 Button(action: {
+                     dismiss()
+                 }) {
+                     Image(systemName: "chevron.left")
+                         .foregroundStyle(.black) 
+                 }
+             }
+         }
+        
     }
 }
 
