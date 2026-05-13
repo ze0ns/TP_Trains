@@ -22,11 +22,9 @@ struct TrainsSchedulerView: View {
     var isFormFilled: Bool {
         fromText != "Откуда" && toText != "Куда"
     }
-    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 0) {
-                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
                         ForEach(storiesItems.indices, id: \.self) { index in
@@ -54,7 +52,7 @@ struct TrainsSchedulerView: View {
                 
                 if isFormFilled {
                     Button(action: {
-                        routeTrains = fromText + " - " + toText
+                        routeTrains = fromText + " -> " + toText
                         print(routeTrains)
                         showTransporter = true
                     }) {
@@ -75,7 +73,7 @@ struct TrainsSchedulerView: View {
                 Spacer()
             }
             .background(Color.backgroundColor)
-            .navigationDestination(isPresented: $showTransporter) {
+            .fullScreenCover(isPresented: $showTransporter) {
                 TransporterView(routeTrains: $routeTrains)
             }
             .animation(.easeInOut(duration: 0.3), value: isFormFilled)

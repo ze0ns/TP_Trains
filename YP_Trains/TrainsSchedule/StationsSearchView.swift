@@ -40,7 +40,7 @@ struct StationsSearchView: View {
                 }
             }
             .padding(10)
-            .background(Color(.systemGray6))
+            .background(Color(.ypSearchBg))
             .cornerRadius(10)
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
@@ -61,12 +61,13 @@ struct StationsSearchView: View {
                         }
                         .padding(.vertical, 4)
                     }
-                    .foregroundColor(.black)
+                    .listRowBackground(Color.backgroundColor)
                 }
                 .listStyle(PlainListStyle())
                 .scrollDismissesKeyboard(.interactively)
             }
         }
+        .background(Color.backgroundColor)
         .navigationTitle("Выбор станции")
         .navigationBarTitleDisplayMode(.inline)
     }

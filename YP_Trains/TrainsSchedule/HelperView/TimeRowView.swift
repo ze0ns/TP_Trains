@@ -14,13 +14,13 @@ struct TimeRowView: View {
     
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 2) {
                 Text(title)
                     .font(.system(size: 17, weight: .medium))
-                    .foregroundColor(.black)
+                    .foregroundColor(.tabColor)
                 Text(subtitle)
                     .font(.system(size: 13))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.tabColor)
             }
             Spacer()
             Image(systemName: isSelected ? "checkmark.square.fill" : "square")

@@ -29,7 +29,7 @@ struct RouteSelectionView: View {
                     HStack {
                         Text(fromText)
                             .font(.system(size: 16))
-                            .foregroundColor(fromText == "Откуда" ? .ypGrayUni : .primary)
+                            .foregroundColor(fromText == "Откуда" ? .ypGrayUni : .black)
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -46,7 +46,7 @@ struct RouteSelectionView: View {
                     HStack {
                         Text(toText)
                             .font(.system(size: 16))
-                            .foregroundColor(toText == "Куда" ? .ypGrayUni : .primary)
+                            .foregroundColor(toText == "Куда" ? .ypGrayUni : .black)
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -109,10 +109,8 @@ struct RouteSelectionView: View {
                             HStack(spacing: 4) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 17, weight: .semibold))
-                                Text("Назад")
-                                    .font(.system(size: 17))
                             }
-                            .foregroundColor(.ypBlue)
+                            .foregroundColor(.textCityColor)
                         }
                     }
                 }
