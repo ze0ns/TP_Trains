@@ -11,7 +11,7 @@ import SwiftUI
 struct YP_TrainsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreen()
         }
     }
 }

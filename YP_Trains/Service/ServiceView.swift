@@ -8,7 +8,7 @@
 import SwiftUI
 import OpenAPIURLSession
 
-struct ContentView: View {
+struct ServiceView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -18,13 +18,13 @@ struct ContentView: View {
         }
         .padding()
         .onAppear {
-            //fetchStations()
-            //fetchSearchBetween()
-            //fetchStationSchedule()
-            //fetshAllStations()
-            //fetshCarrierInfoService()
-            //fetshCopyrightInfo()
-            //fetshNearestCityInfo()
+          //  fetchStations()
+          //  fetchSearchBetween()
+//            fetchStationSchedule()
+//            fetshAllStations()
+//            fetshCarrierInfoService()
+//            fetshCopyrightInfo()
+//            fetshNearestCityInfo()
             fetRouteStationsInfo()
         }
     }
@@ -219,7 +219,8 @@ func fetRouteStationsInfo() {
             )
             print("Fetching routeInfo...")
             let routeInfo = try await service.getRouteStations(
-                uid: "038AA_tis",
+                uid: "098S_1_2",
+                date:"2026-04-27",
                 lang: "ru_RU",
                 showSystems: "all")
             print("Successfully fetched stations: \(routeInfo)")
@@ -230,5 +231,5 @@ func fetRouteStationsInfo() {
 }
 
 #Preview {
-    ContentView()
+    ServiceView()
 }
