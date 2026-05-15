@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TrainsSchedulerView: View {
+    @AppStorage("isDarkMode") private var isDarkMode = false
     let storiesItems = [StoriesItem(imageName: "1", storiesText: "Новость 1"),
                         StoriesItem(imageName: "2", storiesText: "Новость 2"),
                         StoriesItem(imageName: "3", storiesText: "Новость 3"),
@@ -79,6 +80,9 @@ struct TrainsSchedulerView: View {
             .animation(.easeInOut(duration: 0.3), value: isFormFilled)
             .navigationBarTitleDisplayMode(.inline)
         }
+        // MARK: Переключение темы
+        .preferredColorScheme(isDarkMode ? .dark : .light)
+        .animation(.easeInOut(duration: 0.3), value: isDarkMode)
     }
 }
 

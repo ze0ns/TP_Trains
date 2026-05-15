@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct TransporterInfoView: View {
-    @Binding var routeTrains: String
-    
+   
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -39,7 +38,7 @@ struct TransporterInfoView: View {
      
         .navigationTitle("Информация о перевозчике")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true) // Скрываем стандартную кнопку
+        .navigationBarBackButtonHidden(true) 
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                
@@ -47,7 +46,7 @@ struct TransporterInfoView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundStyle(.black) 
+                        .foregroundStyle(.black)
                         .font(.system(size: 17, weight: .semibold))
                 }
             }
@@ -59,6 +58,6 @@ struct TransporterInfoView: View {
 // Для предпросмотра
 #Preview {
     NavigationStack {
-        TransporterInfoView(routeTrains: .constant("Москва - Санкт-Петербург"))
+        TransporterInfoView()
     }
 }
