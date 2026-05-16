@@ -79,13 +79,23 @@ struct StoryPlayerView: View {
                 // СЛОЙ 3: Прогресс и Кнопка закрытия (САМЫЙ ВЕРХНИЙ СЛОЙ!)
                 VStack(spacing: 0) {
                     VStack() {
-                        // Полоски прогресса
                         HStack(spacing: 4) {
                             ForEach(stories.indices, id: \.self) { index in
-                                ProgressView(value: index == selectedIndex ? timerProgress : (index < selectedIndex ? 1.0 : 0.0))
-                                    .progressViewStyle(LinearProgressViewStyle(tint: .progressBarFill))
-                                    .background(Color.white)
-                                    .clipShape(Capsule())
+   
+                                let progress = index == selectedIndex ? timerProgress : (index < selectedIndex ? 1.0 : 0.0)
+   
+                                GeometryReader { geometry in
+                                    ZStack(alignment: .leading) {
+                                        Capsule()
+                                            .fill(Color.white)
+                                        
+                                        Capsule()
+                                            .fill(Color.progressBarFill)
+                                            .frame(width: geometry.size.width * CGFloat(progress))
+                                    }
+                                }
+                               
+                                .frame(height: 6)
                             }
                         }
                         .padding(.top, 28)
