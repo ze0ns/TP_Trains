@@ -58,10 +58,9 @@ struct StoryPlayerView: View {
                     )
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 40))
-                // ДОБАВЛЕНО: Жесты свайпов и тапов
-                .contentShape(Rectangle()) // Чтобы жесты работали по всей площади
+                
+                .contentShape(Rectangle())
                 .onTapGesture { location in
-                    // Тап по левой половине - назад, по правой - вперед
                     if location.x < geometry.size.width / 2 {
                         goToPreviousStory()
                     } else {
@@ -74,17 +73,17 @@ struct StoryPlayerView: View {
                             let horizontalAmount = value.translation.width
                             let verticalAmount = value.translation.height
                             
-                            // Если свайп более выражен по вертикали (вниз)
+                           
                             if abs(verticalAmount) > abs(horizontalAmount) {
                                 if verticalAmount > 0 {
-                                    dismiss() // Свайп вниз — закрыть
+                                    dismiss()
                                 }
                             } else {
-                                // Если свайп более выражен по горизонтали
+                               
                                 if horizontalAmount < 0 {
-                                    goToNextStory() // Свайп влево — следующая
+                                    goToNextStory()
                                 } else {
-                                    goToPreviousStory() // Свайп вправо — предыдущая
+                                    goToPreviousStory()
                                 }
                             }
                         }

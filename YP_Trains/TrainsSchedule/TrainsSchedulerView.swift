@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TrainsSchedulerView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
-    
+    // Моковые данные для Историй
     @State private var storiesItems = [
         StoriesItem(id: 0, backgroundImage: ._1, title: "Text Text Text Text Text Text Text Text Te", description: "Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 "),
         StoriesItem(id: 1, backgroundImage: ._2, title: "Text Text Text Text Text Text Text Text Te", description: "Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 "),

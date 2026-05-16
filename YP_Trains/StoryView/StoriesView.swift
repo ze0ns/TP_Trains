@@ -4,6 +4,7 @@
 //
 //  Created by Oschepkov Aleksandr on 05.05.2026.
 //
+
 import SwiftUI
 struct StoriesView: View {
     var image: UIImage
