@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct StoryPlayerView: View {
-    // 1. Принимаем Binding на массив, чтобы менять isViewed
     @Binding var stories: [StoriesItem]
     @State var selectedIndex: Int
     
@@ -18,10 +17,8 @@ struct StoryPlayerView: View {
     
     private let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     
-    // 2. Инициализатор для поиска нужного индекса по ID
     init(stories: Binding<[StoriesItem]>, initialStoryId: Int) {
         self._stories = stories
-        // Находим индекс сторис по её ID
         let index = stories.wrappedValue.firstIndex(where: { $0.id == initialStoryId }) ?? 0
         self._selectedIndex = State(initialValue: index)
     }
@@ -35,6 +32,7 @@ struct StoryPlayerView: View {
                 let cardWidth = geometry.size.width
                 let cardHeight = geometry.size.height
                 
+                // MARK: - Контент (Картинка + Текст)
                 ZStack(alignment: .bottom) {
                     Image(uiImage: currentStory.backgroundImage)
                         .resizable()
@@ -60,21 +58,39 @@ struct StoryPlayerView: View {
                     )
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 40))
-                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                
-                // Зоны нажатия
-                VStack {
-                    Spacer(minLength: 50)
-                    HStack(spacing: 0) {
-                        Rectangle().foregroundColor(.clear).contentShape(Rectangle())
-                            .onTapGesture { goToPreviousStory() }
-                        Rectangle().foregroundColor(.clear).contentShape(Rectangle())
-                            .onTapGesture { goToNextStory() }
+                // ДОБАВЛЕНО: Жесты свайпов и тапов
+                .contentShape(Rectangle()) // Чтобы жесты работали по всей площади
+                .onTapGesture { location in
+                    // Тап по левой половине - назад, по правой - вперед
+                    if location.x < geometry.size.width / 2 {
+                        goToPreviousStory()
+                    } else {
+                        goToNextStory()
                     }
-                    Spacer(minLength: 17)
                 }
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 30, coordinateSpace: .local)
+                        .onEnded { value in
+                            let horizontalAmount = value.translation.width
+                            let verticalAmount = value.translation.height
+                            
+                            // Если свайп более выражен по вертикали (вниз)
+                            if abs(verticalAmount) > abs(horizontalAmount) {
+                                if verticalAmount > 0 {
+                                    dismiss() // Свайп вниз — закрыть
+                                }
+                            } else {
+                                // Если свайп более выражен по горизонтали
+                                if horizontalAmount < 0 {
+                                    goToNextStory() // Свайп влево — следующая
+                                } else {
+                                    goToPreviousStory() // Свайп вправо — предыдущая
+                                }
+                            }
+                        }
+                )
                 
-                // Прогресс бар и кнопка закрытия
+                // MARK: - Прогресс бар и кнопка закрытия
                 VStack(spacing: 0) {
                     VStack {
                         HStack(spacing: 4) {
@@ -115,7 +131,6 @@ struct StoryPlayerView: View {
             .onReceive(timer) { _ in
                 updateProgress()
             }
-            // 3. Как только открылась сторис — сразу помечаем её как просмотренную!
             .onAppear {
                 markAsViewed()
             }
@@ -130,7 +145,6 @@ struct StoryPlayerView: View {
         }
     }
     
-    // 4. Функция отметки просмотра
     private func markAsViewed() {
         if !stories[selectedIndex].isViewed {
             stories[selectedIndex].isViewed = true
@@ -141,7 +155,7 @@ struct StoryPlayerView: View {
         if selectedIndex < stories.count - 1 {
             selectedIndex += 1
             timerProgress = 0.0
-            markAsViewed() // Отмечаем новую сторис
+            markAsViewed()
         } else {
             dismiss()
         }
@@ -151,7 +165,6 @@ struct StoryPlayerView: View {
         if selectedIndex > 0 {
             selectedIndex -= 1
             timerProgress = 0.0
-            // Предыдущая сторис уже просмотрена, но можно вызвать markAsViewed() для надежности
         } else {
             timerProgress = 0.0
         }

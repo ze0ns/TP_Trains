@@ -45,7 +45,7 @@ struct TrainsSchedulerView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .stroke(item.isViewed ? Color.gray.opacity(0.5) : Color.ypBlue, lineWidth: 4)
+                                    .stroke(item.isViewed ? Color.clear : Color.ypBlue, lineWidth: 4)
                             }
                             .opacity(item.isViewed ? 0.6 : 1.0)
                             .onTapGesture {
