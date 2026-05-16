@@ -24,8 +24,8 @@ struct StoriesView: View {
                 .bold()
                 .font(.system(size: 12, weight: .regular))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                .padding(.leading, 20)
-                .padding(.bottom, 20)
+                .padding(.leading, 8)
+                .padding(.bottom, 12)
         }
     }
 }

@@ -11,10 +11,10 @@ struct TrainsSchedulerView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     
     let storiesItems = [
-        StoriesItem(id: 0, backgroundImage: ._1, title: "🎉 ⭐️ ❤️", description: "Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 "),
-        StoriesItem(id: 1, backgroundImage: ._2, title: "😍 🌸 🥬", description: "Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 "),
-        StoriesItem(id: 2, backgroundImage: ._3, title: "🧀 🥑 🥚", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 "),
-        StoriesItem(id: 3, backgroundImage: ._4, title: "🧀 🥑 🥚", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 ")
+        StoriesItem(id: 0, backgroundImage: ._1, title: "Text Text Text Text Text Text Text Text Te", description: "Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 "),
+        StoriesItem(id: 1, backgroundImage: ._2, title: "Text Text Text Text Text Text Text Text Te", description: "Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 "),
+        StoriesItem(id: 2, backgroundImage: ._3, title: "Text Text Text Text Text Text Text Text Te", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 "),
+        StoriesItem(id: 3, backgroundImage: ._4, title: "Text Text Text Text Text Text Text Text Te", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 ")
     ]
     
     @State private var fromText: String = "Откуда"

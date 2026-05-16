@@ -20,33 +20,34 @@ struct StoryPlayerView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Черный фон на весь экран (красный для дебага, можете вернуть Color.black)
-                Color.red.ignoresSafeArea()
+               
+                Color.black.ignoresSafeArea()
                 
                 let currentStory = stories[selectedIndex]
                 let cardWidth = geometry.size.width
                 let cardHeight = geometry.size.height
                 
                 ZStack(alignment: .bottom) {
-                    // Сама картинка
+             
                     Image(uiImage: currentStory.backgroundImage)
                         .resizable()
                         .scaledToFill()
                         .frame(width: cardWidth, height: cardHeight)
                         .clipped()
                     
-                    // Затемнение снизу для текста
-                    VStack(alignment: .leading, spacing: 8) {
+                    
+                    VStack(alignment: .leading, spacing: 16) {
                         Text(currentStory.title)
-                            .font(.title2)
-                            .fontWeight(.bold)
+                            .font(.system(size: 34, weight: .bold))
                             .foregroundColor(.white)
     
                         Text(currentStory.description)
-                            .font(.body)
+                            .font(.system(size: 20, weight: .regular))
                             .foregroundColor(.white.opacity(0.9))
                     }
-                    .padding()
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 40)
                     .frame(width: cardWidth, alignment: .leading)
                     .background(
                         LinearGradient(colors: [.clear, .black.opacity(0.8)], startPoint: .top, endPoint: .bottom)
@@ -56,7 +57,7 @@ struct StoryPlayerView: View {
                 .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
 
                 VStack {
-                    Spacer(minLength: 50) // Оставляем место сверху для прогресса и крестика!
+                    Spacer(minLength: 50)
                     HStack(spacing: 0) {
                         Rectangle()
                             .foregroundColor(.clear)
@@ -72,11 +73,11 @@ struct StoryPlayerView: View {
                                 goToNextStory()
                             }
                     }
-                    Spacer(minLength: 17) // Снизу упираемся в край картинки
+                    Spacer(minLength: 17)
                 }
                 .padding(.horizontal, 16)
                 
-                // СЛОЙ 3: Прогресс и Кнопка закрытия (САМЫЙ ВЕРХНИЙ СЛОЙ!)
+                //MARK: - Actions, progressbar, close
                 VStack(spacing: 0) {
                     VStack() {
                         HStack(spacing: 4) {
