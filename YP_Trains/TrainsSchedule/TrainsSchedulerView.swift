@@ -10,7 +10,7 @@ import SwiftUI
 struct TrainsSchedulerView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     
-    let storiesItems = [
+    @State private var storiesItems = [
         StoriesItem(id: 0, backgroundImage: ._1, title: "Text Text Text Text Text Text Text Text Te", description: "Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 "),
         StoriesItem(id: 1, backgroundImage: ._2, title: "Text Text Text Text Text Text Text Text Te", description: "Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 "),
         StoriesItem(id: 2, backgroundImage: ._3, title: "Text Text Text Text Text Text Text Text Te", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 "),
@@ -19,14 +19,16 @@ struct TrainsSchedulerView: View {
     
     @State private var fromText: String = "Откуда"
     @State private var toText: String = "Куда"
-    
     @State private var showTransporter = false
     @State private var routeTrains: String = ""
-    
     @State private var selectedStory: StoriesItem?
     
     var isFormFilled: Bool {
         fromText != "Откуда" && toText != "Куда"
+    }
+    
+    var sortedStories: [StoriesItem] {
+        storiesItems.sorted { !$0.isViewed && $1.isViewed }
     }
     
     var body: some View {
@@ -35,7 +37,7 @@ struct TrainsSchedulerView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
-                        ForEach(storiesItems) { item in
+                        ForEach(sortedStories) { item in
                             VStack {
                                 StoriesView(image: item.backgroundImage, storiesText: item.title)
                             }
@@ -43,9 +45,9 @@ struct TrainsSchedulerView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .stroke(item.id < 2 ? Color.ypBlue : Color.gray, lineWidth: 4)
+                                    .stroke(item.isViewed ? Color.gray.opacity(0.5) : Color.ypBlue, lineWidth: 4)
                             }
-                            .opacity(item.id >= 2 ? 0.5 : 1.0)
+                            .opacity(item.isViewed ? 0.6 : 1.0)
                             .onTapGesture {
                                 selectedStory = item
                             }
@@ -86,7 +88,7 @@ struct TrainsSchedulerView: View {
                 TransporterView(routeTrains: $routeTrains)
             }
             .fullScreenCover(item: $selectedStory) { story in
-                StoryPlayerView(stories: storiesItems, selectedIndex: story.id)
+                StoryPlayerView(stories: $storiesItems, initialStoryId: story.id)
             }
             .animation(.easeInOut(duration: 0.3), value: isFormFilled)
             .navigationBarTitleDisplayMode(.inline)

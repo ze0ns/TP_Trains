@@ -11,4 +11,5 @@ struct StoriesItem: Identifiable {
     let backgroundImage: UIImage
     let title: String
     let description: String
+    var isViewed: Bool = false
 }
