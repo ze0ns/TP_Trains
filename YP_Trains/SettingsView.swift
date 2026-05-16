@@ -6,6 +6,13 @@
 //
 
 
+//
+//  SettingsView.swift
+//  YP_Trains
+//
+//  Created by Oschepkov Aleksandr on 15.05.2026.
+//
+
 import SwiftUI
 
 struct SettingsView: View {
@@ -13,33 +20,40 @@ struct SettingsView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
-        Form {
-            // Секция внешнего вида
-            Section(header: Text("Внешний вид")) {
-                Toggle("Темная тема", isOn: $isDarkMode)
-                    .tint(.ypBlue) // Цвет переключателя в стиле вашего приложения
-            }
+        VStack(spacing: 16) {
             
-            // Секция общего
-            Section(header: Text("Общее")) {
-                NavigationLink(destination: Text("Пользовательское сообщение")) {
-                    Text("Пользовательское сообщество")
+            Toggle("Темная тема", isOn: $isDarkMode)
+                .tint(.ypBlue)
+                .foregroundColor(.mainTextColor)
+                .onChange(of: isDarkMode) { oldValue, newValue in
+                    print("Тема изменена на: \(newValue ? "темную" : "светлую")")
                 }
-
-            }
+                .padding(.horizontal, 16)
+                .padding(.top, 24)
             
-            // Секция "О приложении" (внизу)
-            Section {
+            NavigationLink(destination: WebViewScreen(
+                url: URL(string: "https://yandex.ru/legal/practicum_offer")!,
+                title: "Пользовательское соглашение"
+            )) {
                 HStack {
+                    Text("Пользовательское соглашение")
+                        .foregroundColor(.mainTextColor)
                     Spacer()
-                    Text("Версия 1.0 (beta)")
-                        .foregroundColor(.secondary)
-                        .font(.footnote)
-                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.mainTextColor.opacity(0.7))
                 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
             }
+            
+            Spacer()
+            
+            Text("Версия 1.0 (beta)")
+                .foregroundColor(.mainTextColor.opacity(0.7))
+                .font(.footnote)
+                .padding(.bottom, 24)
         }
-        // Кастомная навигация (черная стрелка назад)
+        .background(Color.backgroundColor.ignoresSafeArea())
         .navigationTitle("Настройки")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -49,7 +63,7 @@ struct SettingsView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundStyle(.black) // В темной теме можно сделать .primary
+                        .foregroundStyle(Color.mainTextColor)
                         .font(.system(size: 17, weight: .semibold))
                 }
             }

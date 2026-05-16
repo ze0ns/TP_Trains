@@ -9,10 +9,13 @@ import SwiftUI
 
 struct TrainsSchedulerView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
-    let storiesItems = [StoriesItem(imageName: "1", storiesText: "Новость 1"),
-                        StoriesItem(imageName: "2", storiesText: "Новость 2"),
-                        StoriesItem(imageName: "3", storiesText: "Новость 3"),
-                        StoriesItem(imageName: "4", storiesText: "Новость 4")]
+    
+    let storiesItems = [
+        StoriesItem(id: 0, backgroundImage: ._1, title: "🎉 ⭐️ ❤️", description: "Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 "),
+        StoriesItem(id: 1, backgroundImage: ._2, title: "😍 🌸 🥬", description: "Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 Text2 "),
+        StoriesItem(id: 2, backgroundImage: ._3, title: "🧀 🥑 🥚", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 "),
+        StoriesItem(id: 3, backgroundImage: ._4, title: "🧀 🥑 🥚", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 ")
+    ]
     
     @State private var fromText: String = "Откуда"
     @State private var toText: String = "Куда"
@@ -20,26 +23,32 @@ struct TrainsSchedulerView: View {
     @State private var showTransporter = false
     @State private var routeTrains: String = ""
     
+    @State private var selectedStory: StoriesItem?
+    
     var isFormFilled: Bool {
         fromText != "Откуда" && toText != "Куда"
     }
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 0) {
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
-                        ForEach(storiesItems.indices, id: \.self) { index in
-                            let item = storiesItems[index]
-                            VStack() {
-                                StoriesView(image: item.imageName, storiesText: item.storiesText)
+                        ForEach(storiesItems) { item in
+                            VStack {
+                                StoriesView(image: item.backgroundImage, storiesText: item.title)
                             }
                             .frame(width: 92, height: 140)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.ypBlue, lineWidth: 4)
+                                    .stroke(item.id < 2 ? Color.ypBlue : Color.gray, lineWidth: 4)
                             }
-                            .opacity(index >= 2 ? 0.5 : 1.0)
+                            .opacity(item.id >= 2 ? 0.5 : 1.0)
+                            .onTapGesture {
+                                selectedStory = item
+                            }
                         }
                     }
                     .padding(.top, 3)
@@ -61,7 +70,6 @@ struct TrainsSchedulerView: View {
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(.white)
                             .frame(width: 150, height: 60)
-                            
                             .background(Color.ypBlue)
                             .cornerRadius(16)
                     }
@@ -77,10 +85,12 @@ struct TrainsSchedulerView: View {
             .fullScreenCover(isPresented: $showTransporter) {
                 TransporterView(routeTrains: $routeTrains)
             }
+            .fullScreenCover(item: $selectedStory) { story in
+                StoryPlayerView(stories: storiesItems, selectedIndex: story.id)
+            }
             .animation(.easeInOut(duration: 0.3), value: isFormFilled)
             .navigationBarTitleDisplayMode(.inline)
         }
-        // MARK: Переключение темы
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .animation(.easeInOut(duration: 0.3), value: isDarkMode)
     }

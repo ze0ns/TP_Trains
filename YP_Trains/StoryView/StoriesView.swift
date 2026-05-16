@@ -5,16 +5,15 @@
 //  Created by Oschepkov Aleksandr on 05.05.2026.
 //
 import SwiftUI
-
 struct StoriesView: View {
-    let image: String
-    let storiesText: String
+    var image: UIImage
+    var storiesText: String
     var body: some View {
         ZStack {
             Color.blue
                 .ignoresSafeArea()
                 .overlay(
-                    Image(image)
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .ignoresSafeArea()
@@ -31,5 +30,5 @@ struct StoriesView: View {
     }
 }
 #Preview {
-    StoriesView(image: "2", storiesText: "Главная новость на сегодня")
+    StoriesView(image: ._1, storiesText: "Ура аре")
 }

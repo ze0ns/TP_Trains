@@ -5,10 +5,10 @@
 //  Created by Oschepkov Aleksandr on 05.05.2026.
 //
 
-import Foundation
-
+import UIKit
 struct StoriesItem: Identifiable {
-    let id = UUID()
-    let imageName: String
-    let storiesText: String
+    let id: Int
+    let backgroundImage: UIImage
+    let title: String
+    let description: String
 }
