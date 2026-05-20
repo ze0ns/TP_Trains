@@ -1,35 +1,23 @@
 //
-//  City.swift
+//  CitySearchView.swift
 //  YP_Trains
 //
 //  Created by Oschepkov Aleksandr on 06.05.2026.
 //
-
-
 import SwiftUI
 
 struct CitySearchView: View {
-    let onStationSelected: (String) -> Void // Переименовали замыкание
-    
-    @State private var searchText = ""
-
-    let allCities = [
-      CityModel(name: "Москва"), CityModel(name: "Санкт-Петербург"), CityModel(name: "Краснодар"), CityModel(name: "Казань"), CityModel(name: "Пермь"),  CityModel(name: "Екатеренбург"),  CityModel(name: "Сочи")
-    ]
-    
-    var filteredCities: [CityModel] {
-        if searchText.isEmpty { return allCities }
-        return allCities.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-    }
+    @ObservedObject var viewModel: CityViewModel
+    let onStationSelected: (String) -> Void
     
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 Image(systemName: "magnifyingglass").foregroundColor(.gray)
-                TextField("Поиск города...", text: $searchText)
+                TextField("Поиск города...", text: $viewModel.searchText)
                     .textFieldStyle(PlainTextFieldStyle())
-                if !searchText.isEmpty {
-                    Button(action: { searchText = "" }) {
+                if !viewModel.searchText.isEmpty {
+                    Button(action: viewModel.clearSearch) {
                         Image(systemName: "xmark.circle.fill").foregroundColor(.textCityColor)
                     }
                 }
@@ -40,13 +28,13 @@ struct CitySearchView: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
             
-            if filteredCities.isEmpty {
+            if viewModel.filteredCities.isEmpty {
                 Text("Город не найден")
                     .font(.title.bold())
                     .foregroundColor(.textCitySearchColor)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                List(filteredCities) { city in
+                List(viewModel.filteredCities) { city in
                     NavigationLink {
                         StationsSearchView(cityName: city.name, onStationSelected: onStationSelected)
                     } label: {
@@ -57,7 +45,6 @@ struct CitySearchView: View {
                     }
                     .listRowBackground(Color.backgroundColor)
                 }
-              
                 .listStyle(PlainListStyle())
                 .scrollDismissesKeyboard(.interactively)
             }
@@ -69,5 +56,5 @@ struct CitySearchView: View {
 }
 
 #Preview {
-    CitySearchView(onStationSelected: {_ in "Москва"})
+    CitySearchView(viewModel: CityViewModel(), onStationSelected: {_ in "Москва"})
 }

@@ -13,7 +13,7 @@ struct TransporterInfoView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack() {
             
             // MARK: - Логотип и название
             VStack(alignment: .leading, spacing: 24) {

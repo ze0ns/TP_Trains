@@ -14,6 +14,7 @@ enum ActiveField: Identifiable {
 }
 
 struct RouteSelectionView: View {
+    let cityViewModel = CityViewModel()
     @Binding var fromText: String
     @Binding var toText: String
     
@@ -93,7 +94,7 @@ struct RouteSelectionView: View {
         
         .fullScreenCover(item: $activeField) { field in
             NavigationStack {
-                CitySearchView(onStationSelected: { selectedStation in
+                CitySearchView(viewModel: cityViewModel, onStationSelected: { selectedStation in
                     if field == .from {
                         fromText = selectedStation
                     } else {

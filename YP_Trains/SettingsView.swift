@@ -5,50 +5,26 @@
 //  Created by Oschepkov Aleksandr on 15.05.2026.
 //
 
-
-//
-//  SettingsView.swift
-//  YP_Trains
-//
-//  Created by Oschepkov Aleksandr on 15.05.2026.
-//
-
 import SwiftUI
+
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("isDarkMode") private var isDarkMode = false
+    @State var viewModel = SettingsViewModel()
     
     var body: some View {
         VStack(spacing: 16) {
             
-            Toggle("Темная тема", isOn: $isDarkMode)
+            Toggle("Темная тема", isOn: $viewModel.isDarkMode)
                 .tint(.ypBlue)
                 .foregroundColor(.mainTextColor)
-                .onChange(of: isDarkMode) { oldValue, newValue in
-                    print("Тема изменена на: \(newValue ? "темную" : "светлую")")
-                }
                 .padding(.horizontal, 16)
                 .padding(.top, 24)
-            
-            NavigationLink(destination: WebViewScreen(
-                url: URL(string: "https://yandex.ru/legal/practicum_offer")!,
-                title: "Пользовательское соглашение"
-            )) {
-                HStack {
-                    Text("Пользовательское соглашение")
-                        .foregroundColor(.mainTextColor)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.mainTextColor.opacity(0.7))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-            }
-            
+           
+            userAgreementLink
             Spacer()
             
-            Text("Версия 1.0 (beta)")
+            Text("Версия \(viewModel.appVersion)")
                 .foregroundColor(.mainTextColor.opacity(0.7))
                 .font(.footnote)
                 .padding(.bottom, 24)
@@ -59,14 +35,47 @@ struct SettingsView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(Color.mainTextColor)
-                        .font(.system(size: 17, weight: .semibold))
-                }
+                backButton
             }
+        }
+    }
+    
+    // MARK: - Subviews
+    private var userAgreementLink: some View {
+        Group {
+            if let url = viewModel.userAgreementURL {
+                NavigationLink(destination: WebViewScreen(
+                    url: url,
+                    title: viewModel.userAgreementTitle
+                )) {
+                    userAgreementRow
+                }
+            } else {
+                userAgreementRow
+                    .opacity(0.5)
+            }
+        }
+    }
+    
+    private var userAgreementRow: some View {
+        HStack {
+            Text(viewModel.userAgreementTitle)
+                .foregroundColor(.mainTextColor)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .foregroundColor(.mainTextColor.opacity(0.7))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+    }
+    
+    private var backButton: some View {
+        Button(action: {
+            dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundStyle(Color.mainTextColor)
+                .font(.system(size: 17, weight: .semibold))
         }
     }
 }

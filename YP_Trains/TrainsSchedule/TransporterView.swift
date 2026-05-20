@@ -17,7 +17,7 @@ struct TransporterView: View {
         TrainScheduleModel(operatorName: "РЖД", iconName: "ural", transferName: nil, transportDate: "18 февраля", departureTime: "00:10", arrivalTime: "08:40", duration: "8 ч 30 мин"),
         TrainScheduleModel(operatorName: "Урал логистика", iconName: "fgk", transferName: nil, transportDate: "17 февраля", departureTime: "23:55", arrivalTime: "09:30", duration: "9 ч 35 мин")
     ]
-    
+    let routeFilterViewModel = RouteFilterViewModel()
     @State private var showFilter = false
     @Environment(\.dismiss) var dismiss
     @Binding var routeTrains: String
@@ -70,7 +70,7 @@ struct TransporterView: View {
                 .background(.clear)
             }
             .fullScreenCover(isPresented: $showFilter) {
-                RouteFilterView()
+                RouteFilterView(viewModel: routeFilterViewModel)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

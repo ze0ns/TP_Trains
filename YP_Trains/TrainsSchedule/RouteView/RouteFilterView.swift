@@ -2,27 +2,13 @@
 //  RouteFilterView.swift
 //  YP_Trains
 //
-//  Created by Oschepkov Aleksandr on 09.05.2026.
+//  Created by Oschepkov Aleksandr on 06.05.2026.
 //
-
 import SwiftUI
 
 struct RouteFilterView: View {
-    
-    @State private var selectedTimeSlots: Set<String> = ["Утро", "Ночь"]
-    @State private var showTransfers: Bool = false
+    @ObservedObject var viewModel: RouteFilterViewModel
     @Environment(\.dismiss) var dismiss
-    
-    var showButtonApply: Bool {
-        !selectedTimeSlots.isEmpty
-    }
-    
-    let timeSlots = [
-        ("Утро", "06:00 - 12:00"),
-        ("День", "12:00 - 18:00"),
-        ("Вечер", "18:00 - 00:00"),
-        ("Ночь", "00:00 - 06:00")
-    ]
     
     var body: some View {
         NavigationStack {
@@ -39,14 +25,14 @@ struct RouteFilterView: View {
                             .padding(.leading, 16)
                         
                         VStack(spacing: 0) {
-                            ForEach(timeSlots, id: \.0) { (name, time) in
+                            ForEach(viewModel.timeSlots, id: \.0) { (name, time) in
                                 TimeRowView(
                                     title: name,
                                     subtitle: time,
-                                    isSelected: selectedTimeSlots.contains(name)
+                                    isSelected: viewModel.selectedTimeSlots.contains(name)
                                 )
                                 .onTapGesture {
-                                    toggleTime(name)
+                                    viewModel.toggleTime(name)
                                 }
                             }
                         }
@@ -58,11 +44,11 @@ struct RouteFilterView: View {
                                 .foregroundColor(Color.mainTextColor)
                             
                             VStack(alignment: .leading, spacing: 24) {
-                                RadioButtonView(title: "Да", isSelected: showTransfers) {
-                                    showTransfers = true
+                                RadioButtonView(title: "Да", isSelected: viewModel.showTransfers) {
+                                    viewModel.setShowTransfers(true)
                                 }
-                                RadioButtonView(title: "Нет", isSelected: !showTransfers) {
-                                    showTransfers = false
+                                RadioButtonView(title: "Нет", isSelected: !viewModel.showTransfers) {
+                                    viewModel.setShowTransfers(false)
                                 }
                                 Spacer()
                             }
@@ -71,11 +57,10 @@ struct RouteFilterView: View {
                         .cornerRadius(16)
                     }
                     .padding(.horizontal, 16)
-                    .padding(.bottom, showButtonApply ? 100 : 20)
+                    .padding(.bottom, viewModel.showButtonApply ? 100 : 20)
                 }
                 
-                
-                if showButtonApply {
+                if viewModel.showButtonApply {
                     VStack {
                         Button(action: {
                             dismiss()
@@ -94,7 +79,7 @@ struct RouteFilterView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
-            .animation(.easeInOut(duration: 0.25), value: showButtonApply)
+            .animation(.easeInOut(duration: 0.25), value: viewModel.showButtonApply)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -107,18 +92,8 @@ struct RouteFilterView: View {
             }
         }
     }
-    
-    private func toggleTime(_ name: String) {
-        if selectedTimeSlots.contains(name) {
-            selectedTimeSlots.remove(name)
-        } else {
-            selectedTimeSlots.insert(name)
-        }
-    }
 }
 
-
-
 #Preview {
-    RouteFilterView()
+    RouteFilterView(viewModel: RouteFilterViewModel())
 }
