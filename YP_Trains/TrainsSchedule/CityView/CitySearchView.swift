@@ -36,7 +36,8 @@ struct CitySearchView: View {
             } else {
                 List(viewModel.filteredCities) { city in
                     NavigationLink {
-                        StationsSearchView(cityName: city.name, onStationSelected: onStationSelected)
+                        StationsSearchView(viewModel: StationsSearchViewModel(cityName: city.name, onStationSelected: onStationSelected))
+                        
                     } label: {
                         HStack {
                             Text(city.name)
