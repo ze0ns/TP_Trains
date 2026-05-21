@@ -43,8 +43,6 @@ final class TrainsSchedulerViewModel: ObservableObject {
     }
     
     func searchRoutes() {
-        routeTrains = routeViewModel.fromText + " -> " + routeViewModel.toText
-        print(routeTrains)
         showTransporter = true
     }
 }

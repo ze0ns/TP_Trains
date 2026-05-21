@@ -13,10 +13,7 @@ struct TrainsSchedulerView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 0) {
-                
                 storiesSection
-                
-                // Передаем дочернюю ViewModel
                 RouteSelectionView(viewModel: viewModel.routeViewModel)
                     .padding(.top, 44)
                 
@@ -28,7 +25,11 @@ struct TrainsSchedulerView: View {
             }
             .background(Color.backgroundColor)
             .fullScreenCover(isPresented: $viewModel.showTransporter) {
-                TransporterView(routeTrains: $viewModel.routeTrains)
+                TransporterView(
+                    viewModel: TransporterViewModel(
+                        routeTrains: viewModel.routeViewModel.fromText + " -> " + viewModel.routeViewModel.toText
+                    )
+                )
             }
             .fullScreenCover(item: $viewModel.selectedStory) { story in
                 StoryPlayerView(stories: $viewModel.storiesItems, initialStoryId: story.id)
