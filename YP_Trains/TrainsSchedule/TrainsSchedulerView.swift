@@ -17,15 +17,14 @@ struct TrainsSchedulerView: View {
         StoriesItem(id: 3, backgroundImage: ._4, title: "Text Text Text Text Text Text Text Text Te", description: "Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 Text3 ")
     ]
     
-    @State private var fromText: String = "Откуда"
-    @State private var toText: String = "Куда"
+    @StateObject private var routeViewModel = RouteSelectionViewModel()
     @State private var showTransporter = false
     @State private var routeTrains: String = ""
     @State private var selectedStory: StoriesItem?
     
     var isFormFilled: Bool {
-        fromText != "Откуда" && toText != "Куда"
-    }
+         routeViewModel.fromText != "Откуда" && routeViewModel.toText != "Куда"
+     }
     
     var sortedStories: [StoriesItem] {
         storiesItems.sorted { !$0.isViewed && $1.isViewed }
@@ -59,12 +58,12 @@ struct TrainsSchedulerView: View {
                 }
                 .padding(.top, 24)
                 
-                RouteSelectionView(fromText: $fromText, toText: $toText)
+                RouteSelectionView(viewModel: routeViewModel)
                     .padding(.top, 44)
                 
                 if isFormFilled {
                     Button(action: {
-                        routeTrains = fromText + " -> " + toText
+                        routeTrains = routeViewModel.fromText + " -> " + routeViewModel.toText
                         print(routeTrains)
                         showTransporter = true
                     }) {
