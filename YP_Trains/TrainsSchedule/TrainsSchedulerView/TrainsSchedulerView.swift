@@ -32,7 +32,14 @@ struct TrainsSchedulerView: View {
                 )
             }
             .fullScreenCover(item: $viewModel.selectedStory) { story in
-                StoryPlayerView(stories: $viewModel.storiesItems, initialStoryId: story.id)
+                let playerVM = StoryPlayerViewModel(
+                    stories: viewModel.storiesItems,
+                    initialStoryId: story.id
+                )
+                playerVM.onStoriesUpdated = { updatedStories in
+                    viewModel.storiesItems = updatedStories
+                }
+                return StoryPlayerView(viewModel: playerVM)
             }
             .animation(.easeInOut(duration: 0.3), value: viewModel.isFormFilled)
             .navigationBarTitleDisplayMode(.inline)
