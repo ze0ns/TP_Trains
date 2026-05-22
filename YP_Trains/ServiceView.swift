@@ -9,6 +9,7 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ServiceView: View {
+    let yaApiKey = Config.shared.getApiKey()
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -18,7 +19,7 @@ struct ServiceView: View {
         }
         .padding()
         .onAppear {
-            fetchStations()
+            fetchStations(apiKey: yaApiKey)
           //  fetchSearchBetween()
 //            fetchStationSchedule()
 //            fetshAllStations()
@@ -30,7 +31,7 @@ struct ServiceView: View {
     }
 }
 //MARK: Methods
-func fetchStations() {
+func fetchStations(apiKey: String) {
     Task {
         do {
             
@@ -41,7 +42,7 @@ func fetchStations() {
             
             let service = NearestStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             
             print("Fetching stations...")
@@ -57,7 +58,7 @@ func fetchStations() {
         }
     }
 }
-func fetchSearchBetween() {
+func fetchSearchBetween(apiKey: String) {
     Task {
         do {
             
@@ -68,7 +69,7 @@ func fetchSearchBetween() {
             
             let service = SearchBetweenStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             
             print("Fetching shedule...")
@@ -83,7 +84,7 @@ func fetchSearchBetween() {
         }
     }
 }
-func fetchStationSchedule() {
+func fetchStationSchedule(apiKey: String) {
     Task {
         do {
             
@@ -94,7 +95,7 @@ func fetchStationSchedule() {
             
             let service = StationScheduleService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             
             print("Fetching StaitionShedule...")
@@ -115,7 +116,7 @@ func fetchStationSchedule() {
         }
     }
 }
-func fetshAllStations() {
+func fetshAllStations(apiKey: String) {
     Task {
         do {
             
@@ -126,7 +127,7 @@ func fetshAllStations() {
             
             let service = AllStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching allStations...")
             let allStations = try await service.getAllStations()
@@ -137,7 +138,7 @@ func fetshAllStations() {
     }
 }
 
-func fetshCarrierInfoService() {
+func fetshCarrierInfoService(apiKey: String) {
     Task {
         do {
             
@@ -148,7 +149,7 @@ func fetshCarrierInfoService() {
             
             let service = CarrierInfoService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching carrierInfo...")
             let carrierInfo = try await service.getCarrierInfo(code: "tk", system: "iata", lang: "ru_RU")
@@ -158,7 +159,7 @@ func fetshCarrierInfoService() {
         }
     }
 }
-func fetshCopyrightInfo() {
+func fetshCopyrightInfo(apiKey: String) {
     Task {
         do {
             
@@ -169,7 +170,7 @@ func fetshCopyrightInfo() {
             
             let service = CopyrightInfoService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching copyrightInfo...")
             let copyrightInfo = try await service.getCopyrightInfo()
@@ -179,7 +180,7 @@ func fetshCopyrightInfo() {
         }
     }
 }
-func fetshNearestCityInfo() {
+func fetshNearestCityInfo(apiKey: String) {
     Task {
         do {
             
@@ -190,7 +191,7 @@ func fetshNearestCityInfo() {
             
             let service = NearestCityService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching cityServiceInfo...")
             let cityServiceInfo = try await service.getNearestCity(
@@ -204,7 +205,7 @@ func fetshNearestCityInfo() {
         }
     }
 }
-func fetRouteStationsInfo() {
+func fetRouteStationsInfo(apiKey: String) {
     Task {
         do {
             
@@ -215,7 +216,7 @@ func fetRouteStationsInfo() {
             
             let service = RouteStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching routeInfo...")
             let routeInfo = try await service.getRouteStations(
