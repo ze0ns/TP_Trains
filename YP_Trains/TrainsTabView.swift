@@ -12,7 +12,7 @@ struct TrainsTabView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
-        NavigationStack { // Используем NavigationStack вместо NavigationView
+        NavigationStack {
             ZStack {
                 Group {
                     if selectedTab == 0 {
@@ -51,7 +51,7 @@ struct TrainsTabView: View {
                     .background(Color.backgroundColor)
                 }
             }
-            .navigationBarHidden(true) // Скрываем навигационную панель
+            .navigationBarHidden(true)
             .preferredColorScheme(isDarkMode ? .dark : .light)
         }
     }

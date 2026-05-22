@@ -12,8 +12,9 @@ struct YP_TrainsApp: App {
     @AppStorage("isDarkMode") private var isDarkMode = false
     var body: some Scene {
         WindowGroup {
-            SplashScreen()
-                .preferredColorScheme(isDarkMode ? .dark : .light)
+            //            SplashScreen()
+            //                .preferredColorScheme(isDarkMode ? .dark : .light)
+            ServiceView()
         }
     }
 }

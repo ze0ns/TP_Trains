@@ -18,14 +18,14 @@ struct ServiceView: View {
         }
         .padding()
         .onAppear {
-          //  fetchStations()
+            fetchStations()
           //  fetchSearchBetween()
 //            fetchStationSchedule()
 //            fetshAllStations()
 //            fetshCarrierInfoService()
 //            fetshCopyrightInfo()
 //            fetshNearestCityInfo()
-            fetRouteStationsInfo()
+//            fetRouteStationsInfo()
         }
     }
 }

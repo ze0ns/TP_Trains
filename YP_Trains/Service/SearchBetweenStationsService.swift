@@ -11,7 +11,7 @@
 //  YP_Trains
 //
 //  Created by Oschepkov Aleksandr on 25.04.2026.
-//
+//  Расписание рейсов по станции
 
 import Foundation
 
