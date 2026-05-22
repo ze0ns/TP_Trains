@@ -8,5 +8,6 @@
 import Foundation
 struct StationsModel: Identifiable {
     let id = UUID()
-    let name: String
+    let title: String
+    
 }

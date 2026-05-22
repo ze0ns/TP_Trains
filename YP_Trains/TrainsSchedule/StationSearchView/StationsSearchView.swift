@@ -24,6 +24,9 @@ struct StationsSearchView: View {
         .background(Color.backgroundColor)
         .navigationTitle("Выбор станции")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            viewModel.fetchStations(apiKey: viewModel.yaApiKey)
+        }
     }
 }
 
@@ -64,7 +67,7 @@ private extension StationsSearchView {
                 viewModel.selectStation(station)
             }) {
                 HStack {
-                    Text(station.name)
+                    Text(station.title)
                 }
                 .padding(.vertical, 4)
             }

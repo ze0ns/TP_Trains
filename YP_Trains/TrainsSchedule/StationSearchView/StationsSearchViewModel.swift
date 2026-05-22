@@ -6,17 +6,15 @@
 //
 import SwiftUI
 import Combine
+import OpenAPIURLSession
 
 final class StationsSearchViewModel: ObservableObject {
-    
-    // Состояние поиска
     @Published var searchText: String = ""
     
-    // Данные (в реальном приложении здесь был бы вызов NetworkService/Repository)
-    private let allStations = [
-        StationsModel(name: "Ярославский вокзал"), StationsModel(name: "Казанский вокзал"), StationsModel(name: "Киевский вокзал"),
-        StationsModel(name: "Белорусский вокзал"), StationsModel(name: "Савеловский вокзал"), StationsModel(name: "Ленинградский вокзал")
-    ]
+    let yaApiKey = Config.shared.getApiKey()
+    
+    // 2. Делаем массив Published и изначально пустым
+    @Published var allStations: [StationsModel] = []
     
     let cityName: String
     private let onStationSelected: (String) -> Void
@@ -26,28 +24,70 @@ final class StationsSearchViewModel: ObservableObject {
         self.onStationSelected = onStationSelected
     }
     
-    // Логика фильтрации перенесена из View
+    // Логика фильтрации (используем .title вместо .name)
     var filteredStations: [StationsModel] {
         if searchText.isEmpty {
             return allStations
         } else {
-            return allStations.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            return allStations.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
-    // Проверка, пуст ли поиск (для отображения кнопки очистки)
+    func fetchStations(apiKey: String) {
+        Task {
+            do {
+                let client = Client(
+                    serverURL: try Servers.Server1.url(),
+                    transport: URLSessionTransport()
+                )
+                
+                let service = NearestStationsService(
+                    client: client,
+                    apikey: apiKey
+                )
+                
+                print("Fetching stations...")
+                let response = try await service.getNearestStations(
+                    lat: 59.864177,
+                    lng: 30.319163,
+                    distance: 50
+                )
+                
+                // 1. Получаем доступ к массиву станций (зависит от структуры вашего OpenAPI клиента)
+                guard let stationsArray = response.stations else {
+                    // Если данных нет, очищаем список на экране
+                    await MainActor.run { self.allStations = [] }
+                    return
+                }
+
+                // 2. Мапим именно массив
+                let mappedStations = stationsArray.map { apiStation in
+                    StationsModel(
+                        title: apiStation.title ?? "Без названия"
+                    )
+                }
+
+                // 3. Обновляем UI
+                await MainActor.run {
+                    self.allStations = mappedStations
+                }
+            } catch {
+                print("Error fetching stations: \(error)")
+            }
+        }
+    }
+    
     var isSearchTextEmpty: Bool {
         searchText.isEmpty
     }
     
-    // Логика очистки поиска
     func clearSearch() {
         searchText = ""
     }
     
-    // Логика форматирования и передачи выбранной станции наверх
+    // 5. Используем .title
     func selectStation(_ station: StationsModel) {
-        let finalText = "\(cityName) (\(station.name))"
+        let finalText = "\(cityName) (\(station.title))"
         onStationSelected(finalText)
     }
 }
