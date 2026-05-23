@@ -36,11 +36,10 @@ struct CitySearchView: View {
             } else {
                 List(viewModel.filteredCities) { city in
                     NavigationLink {
-                        StationsSearchView(viewModel: StationsSearchViewModel(cityName: city.name, onStationSelected: onStationSelected))
-                        
+                        StationsSearchView(viewModel: StationsSearchViewModel(cityName: city.title,lat: city.lat, lng: city.lng, onStationSelected: onStationSelected))
                     } label: {
                         HStack {
-                            Text(city.name)
+                            Text(city.title)
                         }
                         .padding(.vertical, 4)
                     }
@@ -53,6 +52,10 @@ struct CitySearchView: View {
         .background(Color.backgroundColor)
         .navigationTitle("Выбор города")
         .navigationBarTitleDisplayMode(.inline)
+        // ДОБАВЛЕНО: Запускаем фильтрацию при каждом изменении текста
+        .onChange(of: viewModel.searchText) { _, _ in
+            viewModel.filterCities()
+        }
     }
 }
 

@@ -14,7 +14,7 @@ struct YP_TrainsApp: App {
         WindowGroup {
         SplashScreen()
             .preferredColorScheme(isDarkMode ? .dark : .light)
-          //  ServiceView()
+//         ServiceView()
         }
     }
 }

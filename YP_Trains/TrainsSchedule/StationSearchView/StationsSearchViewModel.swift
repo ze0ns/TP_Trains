@@ -13,18 +13,21 @@ final class StationsSearchViewModel: ObservableObject {
     
     let yaApiKey = Config.shared.getApiKey()
     
-    // 2. Делаем массив Published и изначально пустым
     @Published var allStations: [StationsModel] = []
     
     let cityName: String
+    let lat: String
+    let lng: String
+    
     private let onStationSelected: (String) -> Void
     
-    init(cityName: String, onStationSelected: @escaping (String) -> Void) {
+    init(cityName: String,lat: String, lng: String, onStationSelected: @escaping (String) -> Void) {
         self.cityName = cityName
+        self.lat = lat
+        self.lng = lng
         self.onStationSelected = onStationSelected
+        fetchStations()
     }
-    
-    // Логика фильтрации (используем .title вместо .name)
     var filteredStations: [StationsModel] {
         if searchText.isEmpty {
             return allStations
@@ -33,7 +36,7 @@ final class StationsSearchViewModel: ObservableObject {
         }
     }
     
-    func fetchStations(apiKey: String) {
+    func fetchStations() {
         Task {
             do {
                 let client = Client(
@@ -43,13 +46,13 @@ final class StationsSearchViewModel: ObservableObject {
                 
                 let service = NearestStationsService(
                     client: client,
-                    apikey: apiKey
+                    apikey: self.yaApiKey
                 )
                 
-                print("Fetching stations...")
+                print("City \(cityName) , Fetching stations...\(lat)   \(lng)")
                 let response = try await service.getNearestStations(
-                    lat: 59.864177,
-                    lng: 30.319163,
+                    lat: Double(lat) ?? 0,
+                    lng: Double(lng) ?? 0,
                     distance: 50
                 )
                 
@@ -63,7 +66,11 @@ final class StationsSearchViewModel: ObservableObject {
                 // 2. Мапим именно массив
                 let mappedStations = stationsArray.map { apiStation in
                     StationsModel(
-                        title: apiStation.title ?? "Без названия"
+                        title: apiStation.title ?? "Без названия",
+                        code: apiStation.code ?? " ",
+                        longitude: apiStation.lng ?? 45.0328,
+                        latitude: apiStation.lat ?? 38.9769
+                        
                     )
                 }
 

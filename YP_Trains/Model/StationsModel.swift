@@ -9,5 +9,6 @@ import Foundation
 struct StationsModel: Identifiable {
     let id = UUID()
     let title: String
-    
+    let code: String
+    let longitude, latitude: Double
 }

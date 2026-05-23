@@ -15,7 +15,7 @@ struct StationsSearchView: View {
         VStack(spacing: 0) {
             searchBar
             
-            if viewModel.filteredStations.isEmpty {
+            if viewModel.allStations.isEmpty {
                 emptyStateView
             } else {
                 stationsList
@@ -25,7 +25,7 @@ struct StationsSearchView: View {
         .navigationTitle("Выбор станции")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            viewModel.fetchStations(apiKey: viewModel.yaApiKey)
+            viewModel.fetchStations()
         }
     }
 }
@@ -79,5 +79,5 @@ private extension StationsSearchView {
 }
 
 #Preview {
-    StationsSearchView(viewModel: StationsSearchViewModel(cityName: "Москва", onStationSelected: { _ in }))
+    StationsSearchView(viewModel: StationsSearchViewModel(cityName: "Москва", lat: " 55,75", lng: "37,61", onStationSelected: { _ in }))
 }
