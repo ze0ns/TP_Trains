@@ -14,8 +14,12 @@ struct StationsSearchView: View {
     var body: some View {
         VStack(spacing: 0) {
             searchBar
-            
-            if viewModel.allStations.isEmpty {
+            if viewModel.isLoading {
+                Spacer()
+                ProgressView("Загрузка станций...")
+                    .padding()
+                Spacer()
+            } else if viewModel.filteredStations.isEmpty {
                 emptyStateView
             } else {
                 stationsList
@@ -25,6 +29,7 @@ struct StationsSearchView: View {
         .navigationTitle("Выбор станции")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+
             viewModel.fetchStations()
         }
     }
