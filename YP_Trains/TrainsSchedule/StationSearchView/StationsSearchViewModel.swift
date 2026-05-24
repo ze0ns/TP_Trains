@@ -55,7 +55,7 @@ final class StationsSearchViewModel: ObservableObject {
                     client: client,
                     apikey: self.yaApiKey
                 )
-
+                
                 let response = try await service.getNearestStations(
                     lat: Double(lat) ?? 0,
                     lng: Double(lng) ?? 0,
