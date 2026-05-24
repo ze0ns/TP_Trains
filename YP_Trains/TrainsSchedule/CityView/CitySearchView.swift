@@ -9,6 +9,7 @@ import SwiftUI
 struct CitySearchView: View {
     @ObservedObject var viewModel: CityViewModel
     let onStationSelected: (String) -> Void
+    let onStationSelectedCodes: (String) -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -36,7 +37,7 @@ struct CitySearchView: View {
             } else {
                 List(viewModel.filteredCities) { city in
                     NavigationLink {
-                        StationsSearchView(viewModel: StationsSearchViewModel(cityName: city.title,lat: city.lat, lng: city.lng, onStationSelected: onStationSelected))
+                        StationsSearchView(viewModel: StationsSearchViewModel(cityName: city.title,lat: city.lat, lng: city.lng, onStationSelected: onStationSelected, onStationSelectedCodes: onStationSelectedCodes))
                     } label: {
                         HStack {
                             Text(city.title)
@@ -60,5 +61,5 @@ struct CitySearchView: View {
 }
 
 #Preview {
-    CitySearchView(viewModel: CityViewModel(), onStationSelected: {_ in "Москва"})
+    CitySearchView(viewModel: CityViewModel(), onStationSelected: {_ in "Москва"}, onStationSelectedCodes: {_ in "c213"})
 }

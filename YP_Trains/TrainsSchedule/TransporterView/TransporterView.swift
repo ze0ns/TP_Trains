@@ -20,7 +20,6 @@ struct TransporterView: View {
                 
                 VStack(spacing: 0) {
                     headerSection
-                    
                     trainsList
                 }
                 
@@ -96,5 +95,5 @@ private extension TransporterView {
 }
 
 #Preview {
-    TransporterView(viewModel: TransporterViewModel(routeTrains: "Москва —> Санкт-Петербург"))
+    TransporterView(viewModel: TransporterViewModel(routeTrains: "Москва —> Санкт-Петербург",fromStations: "c213", toStations: "c146"))
 }

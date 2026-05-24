@@ -19,10 +19,9 @@ struct ServiceView: View {
         }
         .padding()
         .onAppear {
-            fetchStations(apiKey: yaApiKey)
+     //       fetchStations(apiKey: yaApiKey)
           //  fetchSearchBetween()
 //            fetchStationSchedule()
-//            fetshAllStations()
 //            fetshCarrierInfoService()
 //            fetshCopyrightInfo()
 //            fetshNearestCityInfo()
@@ -117,72 +116,6 @@ func fetchStationSchedule(apiKey: String) {
     }
 }
 
-//MARK: AllStations
-//func fetshAllStations(apiKey: String) {
-//    var allStations: [AllStationModel] = []
-//    Task {
-//        do {
-//            
-//            let client = Client(
-//                serverURL: try Servers.Server1.url(),
-//                transport: URLSessionTransport()
-//            )
-//            
-//            let service = AllStationsService(
-//                client: client,
-//                apikey: apiKey
-//            )
-//            print("Fetching allStations...")
-//            let response = try await service.getAllStations()
-//            // 1. Получаем доступ к массиву станций (зависит от структуры вашего OpenAPI клиента)
-//            
-//            guard let model = response else {
-//                // Если данных нет, очищаем список на экране
-//                await MainActor.run { allStations = [] }
-//                return
-//            }
-//
-//            // 1. Проходим по всем странам, регионам и достаем населенные пункты (settlements)
-//            let allSettlements = model.countries.flatMap { country in
-//                country.regions.flatMap { region in
-//                    region.settlements
-//                }
-//            }
-//            
-//            // 2. Преобразуем Settlement в нашу UI-модель CityModel
-//            let cities = allSettlements.map { CityModel(from: $0) }
-//            
-//            // 3. Удаляем дубликаты (по названию и yandex_code, если они есть)
-//            // Часто в API Яндекса один город может встречаться в разных регионах
-//            var uniqueCities: [CityModel] = []
-//            var seenTitles = Set<String>()
-//            
-//            for city in cities {
-//                // Создаем уникальный ключ из названия и кода
-//                let uniqueKey = "\(city.title)_\(city.yandexCode ?? "nil")"
-//                
-//                if !seenTitles.contains(uniqueKey) {
-//                    seenTitles.insert(uniqueKey)
-//                    uniqueCities.append(city)
-//                }
-//            }
-//            
-//            // 4. Сортируем по алфавиту для красивого списка
-//            let sortedCity =  uniqueCities.sorted { $0.title < $1.title }
-//            
-//            
-//            
-//            // 3. Обновляем UI
-//            await MainActor.run {
-//                allStations = sortedCity
-//            }
-//            
-//        
-//        } catch {
-//            print("Error fetching allStations: \(error)")
-//        }
-//    }
-//}
 func extractCities(from model: AllStationModel) -> [CityModel] {
     
     // 1. Проходим по всем странам, регионам и достаем населенные пункты (settlements)
@@ -280,7 +213,7 @@ func fetshNearestCityInfo(apiKey: String) {
         }
     }
 }
-func fetRouteStationsInfo(apiKey: String) {
+func fetchRouteStationsInfo(apiKey: String) {
     Task {
         do {
             

@@ -14,9 +14,7 @@ struct RouteSelectionView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            
             fieldsStack
-            
             swapButton
         }
         .background(Color.ypBlue)
@@ -97,6 +95,9 @@ private extension RouteSelectionView {
         NavigationStack {
             CitySearchView(viewModel: viewModel.cityViewModel) { selectedStation in
                 viewModel.selectStation(selectedStation)
+            } onStationSelectedCodes: { codeString in
+                viewModel.saveCode(codeString)
+                print("Получен код: \(codeString)")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

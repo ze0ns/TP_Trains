@@ -19,15 +19,24 @@ final class RouteSelectionViewModel: ObservableObject {
     
     @Published var fromText: String = "Откуда"
     @Published var toText: String = "Куда"
+    
+    @Published var fromStationsCode: String = "c146"
+    @Published var toStationsCode: String = "c213"
+    
     @Published var activeField: ActiveField?
+    
     let cityViewModel = CityViewModel()
     
-
     func swapCities() {
-        let temp = fromText
+        let tempText = fromText
+        let tempCode = fromStationsCode
+        
         withAnimation(.spring()) {
             fromText = toText
-            toText = temp
+            toText = tempText
+            
+            fromStationsCode = toStationsCode
+            toStationsCode = tempCode
         }
     }
 
@@ -40,6 +49,18 @@ final class RouteSelectionViewModel: ObservableObject {
         case .to:
             toText = station
         }
+    }
+    
+    func saveCode(_ code: String) {
+        guard let field = activeField else { return }
+        
+        switch field {
+        case .from:
+            fromStationsCode = code
+        case .to:
+            toStationsCode = code
+        }
+        
         closeSearch()
     }
     

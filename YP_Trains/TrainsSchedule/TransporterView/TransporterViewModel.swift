@@ -8,17 +8,25 @@
 
 import SwiftUI
 import Combine
+import OpenAPIURLSession
 
 // MARK: - ViewModel
 final class TransporterViewModel: ObservableObject {
     let routeTrains: String
+    let fromStations: String
+    let toStations: String
+    let yaApiKey = Config.shared.getApiKey()
+    
     @Published var trains: [TrainScheduleModel] = []
     @Published var showFilter: Bool = false
     
     let routeFilterViewModel = RouteFilterViewModel()
     
-    init(routeTrains: String) {
+    init(routeTrains: String, fromStations: String, toStations: String) {
         self.routeTrains = routeTrains
+        self.fromStations = fromStations
+        self.toStations = toStations
+        
         loadMockData()
     }
     
@@ -30,9 +38,40 @@ final class TransporterViewModel: ObservableObject {
             TrainScheduleModel(operatorName: "РЖД", iconName: "ural", transferName: nil, transportDate: "18 февраля", departureTime: "00:10", arrivalTime: "08:40", duration: "8 ч 30 мин"),
             TrainScheduleModel(operatorName: "Урал логистика", iconName: "fgk", transferName: nil, transportDate: "17 февраля", departureTime: "23:55", arrivalTime: "09:30", duration: "9 ч 35 мин")
         ]
+        print("++++++++++++++++++++++++++++++++")
+        print(fromStations)
+        print(toStations)
+        print("++++++++++++++++++++++++++++++++")
     }
     
     func openFilter() {
         showFilter = true
+    }
+    
+    func fetchSearchBetween() {
+        Task {
+            do {
+                
+                let client = Client(
+                    serverURL: try Servers.Server1.url(),
+                    transport: URLSessionTransport()
+                )
+                
+                let service = SearchBetweenStationsService(
+                    client: client,
+                    apikey: yaApiKey
+                )
+                
+                print("Fetching shedule...")
+                let schedule = try await service.getScheduleBetweenStations(
+                    from: "c146",
+                    to: "c213",
+                    date: "2026-04-30"
+                )
+                print("Successfully fetched stations: \(schedule)")
+            } catch {
+                print("Error fetching stations: \(error)")
+            }
+        }
     }
 }

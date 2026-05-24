@@ -27,7 +27,9 @@ struct TrainsSchedulerView: View {
             .fullScreenCover(isPresented: $viewModel.showTransporter) {
                 TransporterView(
                     viewModel: TransporterViewModel(
-                        routeTrains: viewModel.routeViewModel.fromText + " -> " + viewModel.routeViewModel.toText
+                        routeTrains: viewModel.routeViewModel.fromText + " -> " + viewModel.routeViewModel.toText,
+                        fromStations: viewModel.routeViewModel.fromStationsCode,
+                        toStations: viewModel.routeViewModel.toStationsCode
                     )
                 )
             }

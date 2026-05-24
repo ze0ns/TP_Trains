@@ -21,12 +21,15 @@ final class StationsSearchViewModel: ObservableObject {
     let lng: String
 
     private let onStationSelected: (String) -> Void
+    private let onStationSelectedCodes: (String) -> Void
 
-    init(cityName: String, lat: String, lng: String, onStationSelected: @escaping (String) -> Void) {
+
+    init(cityName: String, lat: String, lng: String, onStationSelected: @escaping (String) -> Void, onStationSelectedCodes: @escaping (String) -> Void) {
         self.cityName = cityName
         self.lat = lat
         self.lng = lng
         self.onStationSelected = onStationSelected
+        self.onStationSelectedCodes = onStationSelectedCodes
         fetchStations()
     }
     
@@ -53,7 +56,6 @@ final class StationsSearchViewModel: ObservableObject {
                     apikey: self.yaApiKey
                 )
 
-                print("City \(cityName) , Fetching stations...\(lat)   \(lng)")
                 let response = try await service.getNearestStations(
                     lat: Double(lat) ?? 0,
                     lng: Double(lng) ?? 0,
@@ -106,5 +108,6 @@ final class StationsSearchViewModel: ObservableObject {
     func selectStation(_ station: StationsModel) {
         let finalText = "\(cityName) (\(station.title))"
         onStationSelected(finalText)
+        onStationSelectedCodes(station.code)
     }
 }

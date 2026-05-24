@@ -61,7 +61,7 @@ class CachedDataManager: ObservableObject {
             return false
         }
         
-        let oneDayInSecounds = 24 * 60 * 60
+        let oneDayInSecounds = 120 * 60 * 60
         let interval = Date().timeIntervalSince(timestamp)
         
         return interval < Double(oneDayInSecounds)

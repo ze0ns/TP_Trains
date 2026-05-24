@@ -84,5 +84,5 @@ private extension StationsSearchView {
 }
 
 #Preview {
-    StationsSearchView(viewModel: StationsSearchViewModel(cityName: "Москва", lat: " 55,75", lng: "37,61", onStationSelected: { _ in }))
+    StationsSearchView(viewModel: StationsSearchViewModel(cityName: "Москва", lat: " 55,75", lng: "37,61", onStationSelected: { _ in }, onStationSelectedCodes:  { _ in }))
 }
