@@ -28,8 +28,8 @@ final class TransporterViewModel: ObservableObject {
         self.routeTrains = routeTrains
         self.fromStations = fromStations
         self.toStations = toStations
-        
-        loadMockData()
+        self.fetchSearchBetween()
+        //loadMockData()
     }
     
     private func loadMockData() {
@@ -49,8 +49,15 @@ final class TransporterViewModel: ObservableObject {
     func openFilter() {
         showFilter = true
     }
-    
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.dateFormat = "dd.MM.yyyy"
+        return formatter
+    }()
+
     func fetchSearchBetween() {
+        let currentDate = Date()
         Task {
             do {
                 
@@ -68,7 +75,7 @@ final class TransporterViewModel: ObservableObject {
                 let schedule = try await service.getScheduleBetweenStations(
                     from: fromStations ,
                     to: toStations,
-                    date: "2026-04-30"
+                    date: "2026-06-30"
                 )
                 
                 guard let transporterArray = schedule.segments else {
@@ -85,15 +92,63 @@ final class TransporterViewModel: ObservableObject {
                                        iconName: "rzd",
                                        carrierCode: apiTransporter.thread?.carrier?.code ?? 0,
                                        transferName: "",
-                                       transportDate: self.secondsToDurations.extractDateString(from: apiTransporter.arrival?.ISO8601Format() ?? "") ?? "",
-                                       departureTime: self.secondsToDurations.extractTimeOnly(from: apiTransporter.departure?.ISO8601Format() ?? "") ?? "" ,
-                                       arrivalTime: self.secondsToDurations.extractTimeOnly(from: apiTransporter.arrival?.ISO8601Format() ?? "") ?? "",
-                                       duration: self.secondsToDurations.formatTime(seconds: apiTransporter.duration ?? 0))
+                                       transportDate: self.extractDateString(from: apiTransporter.arrival ?? currentDate),
+                                       departureTime: self.extractTimeOnly(from: apiTransporter.departure ?? currentDate) ?? "",
+                                       arrivalTime: self.extractTimeOnly(from: apiTransporter.arrival ?? currentDate) ?? "",
+                                       duration: self.formatTime(seconds: apiTransporter.duration ?? 0))
                 }
                 print("Successfully fetched stations: \(mappedTransporter)")
+                
+                // 3. Обновляем UI
+                await MainActor.run {
+                    self.trains = mappedTransporter
+                    //self.isLoading = false // Выключаем индикатор загрузки
+                }
             } catch {
                 print("Error fetching stations: \(error)")
             }
         }
+    }
+}
+extension TransporterViewModel{
+    func extractDateString(from date: Date) -> String {
+        return Self.dateFormatter.string(from: date)
+    }
+    func formatTime(seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        
+        func pluralize(_ number: Int, forms: [String]) -> String {
+            let lastDigit = number % 10
+            let lastTwoDigits = number % 100
+            
+            if lastTwoDigits >= 11 && lastTwoDigits <= 14 {
+                return forms[2]
+            } else if lastDigit == 1 {
+                return forms[0]
+            } else if lastDigit >= 2 && lastDigit <= 4 {
+                return forms[1]
+            } else {
+                return forms[2]
+            }
+        }
+        
+        let hourString = pluralize(hours, forms: ["час", "часа", "часов"])
+        let minuteString = pluralize(minutes, forms: ["минуту", "минуты", "минут"])
+        
+        if hours > 0 {
+            return "\(hours) \(hourString) \(minutes) \(minuteString)"
+        } else if minutes > 0 {
+            return "\(minutes) \(minuteString)"
+        } else {
+            return "0 минут"
+        }
+    }
+    func extractTimeOnly(from date: Date) -> String? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        return formatter.string(from: date)
     }
 }

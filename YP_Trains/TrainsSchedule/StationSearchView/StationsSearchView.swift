@@ -29,7 +29,6 @@ struct StationsSearchView: View {
         .navigationTitle("Выбор станции")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-
             viewModel.fetchStations()
         }
     }

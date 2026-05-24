@@ -22,7 +22,7 @@ final class StationsSearchViewModel: ObservableObject {
 
     private let onStationSelected: (String) -> Void
     private let onStationSelectedCodes: (String) -> Void
-
+    private var currentFetchTask: Task<Void, Never>?
 
     init(cityName: String, lat: String, lng: String, onStationSelected: @escaping (String) -> Void, onStationSelectedCodes: @escaping (String) -> Void) {
         self.cityName = cityName
@@ -30,7 +30,7 @@ final class StationsSearchViewModel: ObservableObject {
         self.lng = lng
         self.onStationSelected = onStationSelected
         self.onStationSelectedCodes = onStationSelectedCodes
-        fetchStations()
+        self.fetchStations()
     }
     
     var filteredStations: [StationsModel] {
@@ -43,8 +43,9 @@ final class StationsSearchViewModel: ObservableObject {
 
     func fetchStations() {
         isLoading = true // Включаем индикатор загрузки
+        currentFetchTask?.cancel()
         
-        Task {
+        currentFetchTask = Task {
             do {
                 let client = Client(
                     serverURL: try Servers.Server1.url(),

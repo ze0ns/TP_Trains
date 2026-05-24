@@ -58,5 +58,5 @@ struct TrainCardView: View {
 }
 
 #Preview {
-    TrainCardView(train:TrainScheduleModel(operatorName: "РЖД", iconName: "rzd", transferName: "С пересадкой в Москве",transportDate: "15 февраля", departureTime: "22:30 ", arrivalTime: " 08:15", duration: "9 ч 45 мин"))
+    TrainCardView(train:TrainScheduleModel(operatorName: "РЖД", iconName: "rzd", carrierCode: 112, transferName: "С пересадкой в Москве",transportDate: "15 февраля", departureTime: "22:30 ", arrivalTime: " 08:15", duration: "9 ч 45 мин"))
 }
