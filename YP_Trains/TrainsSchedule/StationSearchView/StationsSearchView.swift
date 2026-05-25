@@ -9,7 +9,11 @@ import Combine
 
 struct StationsSearchView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var viewModel: StationsSearchViewModel
+    @StateObject var viewModel: StationsSearchViewModel
+    
+    init(viewModel: StationsSearchViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         VStack(spacing: 0) {
