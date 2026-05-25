@@ -2,7 +2,7 @@
 //  StationsSearchViewModel.swift
 //  YP_Trains
 //
-//  Created by Oschepkov Aleksandr on 21.05.2026.
+//  Created by Oschepkov Aleksandr on 06.05.2026.
 //
 import SwiftUI
 import Combine
@@ -10,8 +10,8 @@ import OpenAPIURLSession
 
 final class StationsSearchViewModel: ObservableObject {
     @Published var searchText: String = ""
-    @Published var isLoading: Bool = false // Добавляем индикатор загрузки
-    
+    @Published var isLoading: Bool = false
+
     let yaApiKey = Config.shared.getApiKey()
 
     @Published var allStations: [StationsModel] = []
@@ -30,70 +30,15 @@ final class StationsSearchViewModel: ObservableObject {
         self.lng = lng
         self.onStationSelected = onStationSelected
         self.onStationSelectedCodes = onStationSelectedCodes
-        self.fetchStations()
     }
-    
+
     var filteredStations: [StationsModel] {
         if searchText.isEmpty {
+            print("🔍 filteredStations запрошен, отдаем  без фильтра \(allStations.count) станций. Поиск: '\(searchText)'")
             return allStations
         } else {
+            print("🔍 filteredStations запрошен, отдаем \(allStations.count) станций. Поиск: '\(searchText)'")
             return allStations.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
-        }
-    }
-
-    func fetchStations() {
-        isLoading = true // Включаем индикатор загрузки
-        currentFetchTask?.cancel()
-        
-        currentFetchTask = Task {
-            do {
-                let client = Client(
-                    serverURL: try Servers.Server1.url(),
-                    transport: URLSessionTransport()
-                )
-
-                let service = NearestStationsService(
-                    client: client,
-                    apikey: self.yaApiKey
-                )
-                
-                let response = try await service.getNearestStations(
-                    lat: Double(lat) ?? 0,
-                    lng: Double(lng) ?? 0,
-                    distance: 50
-                )
-
-                // 1. Получаем доступ к массиву станций (зависит от структуры вашего OpenAPI клиента)
-                guard let stationsArray = response.stations else {
-                    // Если данных нет, очищаем список на экране
-                    await MainActor.run {
-                        self.allStations = []
-                        self.isLoading = false // Выключаем индикатор загрузки
-                    }
-                    return
-                }
-  
-                // 2. Мапим именно массив
-                let mappedStations = stationsArray.map { apiStation in
-                    StationsModel(
-                        title: apiStation.title ?? "Без названия",
-                        code: apiStation.code ?? " ",
-                        longitude: apiStation.lng ?? 45.0328,
-                        latitude: apiStation.lat ?? 38.9769
-                    )
-                }
-  
-                // 3. Обновляем UI
-                await MainActor.run {
-                    self.allStations = mappedStations
-                    self.isLoading = false // Выключаем индикатор загрузки
-                }
-            } catch {
-                print("Error fetching stations: \(error)")
-                await MainActor.run {
-                    self.isLoading = false // Выключаем индикатор загрузки при ошибке
-                }
-            }
         }
     }
 
@@ -105,10 +50,72 @@ final class StationsSearchViewModel: ObservableObject {
         searchText = ""
     }
 
-    // 5. Используем .title
     func selectStation(_ station: StationsModel) {
         let finalText = "\(cityName) (\(station.title))"
         onStationSelected(finalText)
         onStationSelectedCodes(station.code)
+    }
+}
+
+extension StationsSearchViewModel {
+    func fetchStations() {
+        guard !isLoading else { return }
+        print("************** Грузим станции вокруг города *****************")
+        isLoading = true
+        currentFetchTask?.cancel()
+
+        currentFetchTask = Task {
+            do {
+                let client = Client(
+                    serverURL: try Servers.Server1.url(),
+                    transport: URLSessionTransport()
+                )
+
+                let service = NearestStationsService(
+                    client: client,
+                    apikey: self.yaApiKey
+                )
+
+                let response = try await service.getNearestStations(
+                    lat: Double(lat) ?? 0,
+                    lng: Double(lng) ?? 0,
+                    distance: 50
+                )
+
+                guard let stationsArray = response.stations else {
+                    await MainActor.run {
+                        self.allStations = []
+                        self.isLoading = false
+                    }
+                    return
+                }
+
+                let mappedStations = stationsArray.map { apiStation in
+                    StationsModel(
+                        title: apiStation.title ?? "Без названия",
+                        code: apiStation.code ?? " ",
+                        longitude: apiStation.lng ?? 45.0328,
+                        latitude: apiStation.lat ?? 38.9769
+                    )
+                }
+                print("++++++++++++++++++ \(mappedStations.count)+++++++++++++++")
+                await MainActor.run {
+                    // ПРИНТ 2: Проверяем, что свойство обновилось
+                    print("✅ mappedStations обновлен, количество: \(mappedStations.count)")
+                  
+                    self.allStations = mappedStations
+                    
+                    print("✅ allStations обновлен, количество: \(self.allStations.count)")
+                    print("✅ filteredStations количество: \(self.filteredStations.count)")
+                    
+                    self.isLoading = false
+                }
+            } catch {
+                print("Error fetching stations: \(error)")
+                await MainActor.run {
+                    self.isLoading = false
+                }
+            }
+        }
     }
 }

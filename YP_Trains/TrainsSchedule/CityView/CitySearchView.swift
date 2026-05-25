@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct CitySearchView: View {
-    @ObservedObject var viewModel: CityViewModel
+    @StateObject var viewModel: CityViewModel
     let onStationSelected: (String) -> Void
     let onStationSelectedCodes: (String) -> Void
     
@@ -37,7 +37,16 @@ struct CitySearchView: View {
             } else {
                 List(viewModel.filteredCities) { city in
                     NavigationLink {
-                        StationsSearchView(viewModel: StationsSearchViewModel(cityName: city.title,lat: city.lat, lng: city.lng, onStationSelected: onStationSelected, onStationSelectedCodes: onStationSelectedCodes))
+                        // ОБЕРНУТО В LazyView! Теперь ViewModel и onAppear сработают ТОЛЬКО при переходе
+                        LazyView {
+                            StationsSearchView(viewModel: StationsSearchViewModel(
+                                cityName: city.title,
+                                lat: city.lat,
+                                lng: city.lng,
+                                onStationSelected: onStationSelected,
+                                onStationSelectedCodes: onStationSelectedCodes
+                            ))
+                        }
                     } label: {
                         HStack {
                             Text(city.title)

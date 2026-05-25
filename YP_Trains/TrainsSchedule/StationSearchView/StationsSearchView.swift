@@ -28,7 +28,7 @@ struct StationsSearchView: View {
         .background(Color.backgroundColor)
         .navigationTitle("Выбор станции")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
+        .task {
             viewModel.fetchStations()
         }
     }

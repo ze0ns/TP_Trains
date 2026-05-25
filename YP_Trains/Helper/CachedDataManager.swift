@@ -6,70 +6,72 @@
 //
 // CachedDataManager.swift
 import Foundation
-import Combine
 
-class CachedDataManager: ObservableObject {
+class CachedDataManager {
     static let shared = CachedDataManager()
     
-    @Published var cachedData: [CityModel]? = nil
+    private let fileManager = FileManager.default
+    private let citiesCacheFileName = "cached_cities.json"
     
-    private let userDefaults = UserDefaults.standard
+    private init() {}
     
-    private init() {
-        // Загружаем данные из кэша при создании
-        loadFromCache()
+    // MARK: - Путь к файлу кэша
+    private var cacheFileURL: URL {
+        let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        return cachesDirectory.appendingPathComponent(citiesCacheFileName)
     }
     
-    private let citiesCacheKey = "cached_cities"
-    private let cacheTimestampKey = "cache_timestamp"
-    
+    // MARK: - Сохранение
     func saveCities(_ cities: [CityModel]) {
         do {
             let data = try JSONEncoder().encode(cities)
-            userDefaults.set(data, forKey: citiesCacheKey)
-            
-            let timestamp = Date()
-            userDefaults.set(timestamp, forKey: cacheTimestampKey)
-            
-            cachedData = cities
-            print("Cities cached successfully")
+            // Перезаписываем файл в директорию Caches
+            try data.write(to: cacheFileURL, options: .atomicWrite)
+            print("Cities cached successfully to file")
         } catch {
-            print("Error saving cities to cache: \(error)")
+            print("Error saving cities to file: \(error)")
         }
     }
     
+    // MARK: - Чтение
     func getCachedCities() -> [CityModel]? {
-        guard let data = userDefaults.data(forKey: citiesCacheKey) else {
+        guard fileManager.fileExists(atPath: cacheFileURL.path) else {
             return nil
         }
         
         do {
+            let data = try Data(contentsOf: cacheFileURL)
             let cities = try JSONDecoder().decode([CityModel].self, from: data)
             return cities
         } catch {
-            print("Error decoding cached cities: \(error)")
+            print("Error decoding cached cities from file: \(error)")
             return nil
         }
     }
     
+    // MARK: - Проверки
     func isDataCached() -> Bool {
-        return userDefaults.object(forKey: citiesCacheKey) != nil
+        return fileManager.fileExists(atPath: cacheFileURL.path)
     }
     
     func isCacheFresh() -> Bool {
-        guard let timestamp = userDefaults.object(forKey: cacheTimestampKey) as? Date else {
+        guard let attributes = try? fileManager.attributesOfItem(atPath: cacheFileURL.path),
+              let modificationDate = attributes[.modificationDate] as? Date else {
             return false
         }
         
-        let oneDayInSecounds = 120 * 60 * 60
-        let interval = Date().timeIntervalSince(timestamp)
+        // ИСПРАВЛЕНО: 24 часа (1 день) = 86 400 секунд
+        let oneDayInSeconds: Double = 24 * 60 * 60
+        let interval = Date().timeIntervalSince(modificationDate)
         
-        return interval < Double(oneDayInSecounds)
+        return interval < oneDayInSeconds
     }
     
-    private func loadFromCache() {
-        if isDataCached(), isCacheFresh() {
-            cachedData = getCachedCities()
+    // Опционально: метод для очистки кэша, если он устарел
+    func clearCacheIfNeeded() {
+        if isDataCached() && !isCacheFresh() {
+            try? fileManager.removeItem(at: cacheFileURL)
+            print("Old cache removed")
         }
     }
 }
