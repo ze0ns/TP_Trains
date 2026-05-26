@@ -37,7 +37,6 @@ struct CitySearchView: View {
             } else {
                 List(viewModel.filteredCities) { city in
                     NavigationLink {
-                        // ОБЕРНУТО В LazyView! Теперь ViewModel и onAppear сработают ТОЛЬКО при переходе
                         LazyView {
                             StationsSearchView(viewModel: StationsSearchViewModel(
                                 cityName: city.title,

@@ -29,21 +29,6 @@ final class TransporterViewModel: ObservableObject {
         self.fromStations = fromStations
         self.toStations = toStations
         self.fetchSearchBetween()
-        //loadMockData()
-    }
-    
-    private func loadMockData() {
-        self.trains = [
-            TrainScheduleModel(operatorName: "РЖД", iconName: "rzd", carrierCode: 112, transferName: "С пересадкой в Костроме", transportDate: "15 февраля", departureTime: "22:30", arrivalTime: "08:15", duration: "9 ч 45 мин"),
-            TrainScheduleModel(operatorName: "ФГК", iconName: "ural", carrierCode: 112, transferName: "С пересадкой в Москве", transportDate: "16 февраля", departureTime: "23:00", arrivalTime: "08:15", duration: "9 ч 15 мин"),
-            TrainScheduleModel(operatorName: "Урал логистика", iconName: "fgk", carrierCode: 112, transferName: nil, transportDate: "17 февраля", departureTime: "23:55", arrivalTime: "09:30", duration: "9 ч 35 мин"),
-            TrainScheduleModel(operatorName: "РЖД", iconName: "ural", carrierCode: 112, transferName: nil, transportDate: "18 февраля", departureTime: "00:10", arrivalTime: "08:40", duration: "8 ч 30 мин"),
-            TrainScheduleModel(operatorName: "Урал логистика", iconName: "fgk", carrierCode: 112, transferName: nil, transportDate: "17 февраля", departureTime: "23:55", arrivalTime: "09:30", duration: "9 ч 35 мин")
-        ]
-        print("++++++++++++++++++++++++++++++++")
-        print(fromStations)
-        print(toStations)
-        print("++++++++++++++++++++++++++++++++")
     }
     
     func openFilter() {
@@ -79,10 +64,8 @@ final class TransporterViewModel: ObservableObject {
                 )
                 
                 guard let transporterArray = schedule.segments else {
-                    // Если данных нет, очищаем список на экране
                     await MainActor.run {
                         self.trains = []
-                   //     self.isLoading = false // Выключаем индикатор загрузки
                     }
                     return
                 }
@@ -102,10 +85,32 @@ final class TransporterViewModel: ObservableObject {
                 // 3. Обновляем UI
                 await MainActor.run {
                     self.trains = mappedTransporter
-                    //self.isLoading = false // Выключаем индикатор загрузки
                 }
             } catch {
                 print("Error fetching stations: \(error)")
+            }
+        }
+    }
+}
+extension TransporterViewModel{
+    func fetshCarrierInfoService(carrierCode: String) {
+        Task {
+            do {
+                
+                let client = Client(
+                    serverURL: try Servers.Server1.url(),
+                    transport: URLSessionTransport()
+                )
+                
+                let service = CarrierInfoService(
+                    client: client,
+                    apikey: self.yaApiKey
+                )
+                print("Fetching carrierInfo...")
+                let carrierInfo = try await service.getCarrierInfo(code: carrierCode, system: "yandex", lang: "ru_RU")
+                print("Successfully fetched carrierInfo: \(carrierInfo)")
+            } catch {
+                print("Error fetching carrierInfo: \(error)")
             }
         }
     }
