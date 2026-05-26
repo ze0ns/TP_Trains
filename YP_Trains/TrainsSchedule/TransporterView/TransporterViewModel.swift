@@ -72,7 +72,7 @@ final class TransporterViewModel: ObservableObject {
                 // 2. Мапим именно массив
                 let mappedTransporter = transporterArray.map { apiTransporter in
                     TrainScheduleModel(operatorName: apiTransporter.thread?.carrier?.title ?? "",
-                                       iconName: "rzd",
+                                       iconName: apiTransporter.thread?.carrier?.logo ?? "rzd",
                                        carrierCode: apiTransporter.thread?.carrier?.code ?? 0,
                                        transferName: "",
                                        transportDate: self.extractDateString(from: apiTransporter.arrival ?? currentDate),

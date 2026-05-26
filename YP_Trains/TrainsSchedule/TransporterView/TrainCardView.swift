@@ -13,8 +13,14 @@ struct TrainCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(){
-                Image(train.iconName)
-                    .frame(width: 38, height: 38)
+                AsyncImage(url: URL(string: train.iconName)) { image in
+                      image
+                          .resizable()
+                          .frame(width: 38, height: 38)
+                  } placeholder: {
+                         Image("rzd")
+                          .frame(width: 38, height: 38)
+                  }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(train.operatorName)
                         .font(.system(size: 16, weight: .regular))
