@@ -4,17 +4,17 @@
 //
 //  Created by Oschepkov Aleksandr on 05.05.2026.
 //
-import SwiftUI
 
+import SwiftUI
 struct StoriesView: View {
-    let image: String
-    let storiesText: String
+    var image: UIImage
+    var storiesText: String
     var body: some View {
         ZStack {
             Color.blue
                 .ignoresSafeArea()
                 .overlay(
-                    Image(image)
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .ignoresSafeArea()
@@ -25,11 +25,11 @@ struct StoriesView: View {
                 .bold()
                 .font(.system(size: 12, weight: .regular))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                .padding(.leading, 20)
-                .padding(.bottom, 20)
+                .padding(.leading, 8)
+                .padding(.bottom, 12)
         }
     }
 }
 #Preview {
-    StoriesView(image: "2", storiesText: "Главная новость на сегодня")
+    StoriesView(image: ._1, storiesText: "Ура аре")
 }
