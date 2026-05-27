@@ -6,29 +6,28 @@
 //  Список всех доступных станций
 
 import Foundation
-
 import OpenAPIRuntime
 import OpenAPIURLSession
-typealias AllStationsResponse = Components.Schemas.AllStationsResponse
 
-// MARK: - All Stations Service
 protocol AllStationsServiceProtocol {
-    func getAllStations() async throws
+    func getAllStations() async
 }
 
-final class AllStationsService: AllStationsServiceProtocol {
+
+actor AllStationsService: AllStationsServiceProtocol {
 
     private let client: Client
     private let apikey: String
-    var fullData = Data()
-    let yaApiKey = Config.shared.getApiKey()
+
+    private let yaApiKey = Config.shared.getApiKey()
     
     init(client: Client, apikey: String) {
         self.client = client
         self.apikey = apikey
     }
     
-    func getAllStations() async  {
+
+    func getAllStations() async {
         do {
             let urlString = "https://api.rasp.yandex.net/v3.0/stations_list/?apikey=\(yaApiKey)&format=json"
             
@@ -39,7 +38,6 @@ final class AllStationsService: AllStationsServiceProtocol {
             
             print("Fetching allStations via URLSession...")
             
-            // 2. Делаем стандартный сетевой запрос
             let (data, response) = try await URLSession.shared.data(from: url)
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
@@ -50,7 +48,7 @@ final class AllStationsService: AllStationsServiceProtocol {
             let model = try JSONDecoder().decode(AllStationModel.self, from: data)
             
             let allSettlements = model.countries
-                .filter { $0.title == "Россия" } // <--- ДОБАВЛЕН ФИЛЬТР: БЕРЕМ ТОЛЬКО РОССИЮ
+                .filter { $0.title == "Россия" }
                 .flatMap { country in
                     country.regions.flatMap { region in
                         region.settlements
@@ -59,7 +57,6 @@ final class AllStationsService: AllStationsServiceProtocol {
             
             let cities = allSettlements.map { CityModel(from: $0) }
             
-
             var uniqueCities: [CityModel] = []
             var seenTitles = Set<String>()
             
@@ -73,6 +70,7 @@ final class AllStationsService: AllStationsServiceProtocol {
             }
             
             let sortedCities = uniqueCities.sorted { $0.title < $1.title }
+            
             CachedDataManager.shared.saveCities(sortedCities)
                         
         } catch {

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-
+@MainActor
 @Observable class SettingsViewModel {
     var isDarkMode: Bool {
         didSet {

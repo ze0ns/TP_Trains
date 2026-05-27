@@ -8,6 +8,7 @@ import SwiftUI
 import Combine
 import OpenAPIURLSession
 
+@MainActor
 final class StationsSearchViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isLoading: Bool = false

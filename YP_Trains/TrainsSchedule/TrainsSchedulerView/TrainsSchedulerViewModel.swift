@@ -9,7 +9,7 @@
 import SwiftUI
 import Combine
 
-// MARK: - ViewModel
+@MainActor
 final class TrainsSchedulerViewModel: ObservableObject {
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
     @Published var storiesItems: [StoriesItem] = [

@@ -14,7 +14,7 @@ enum ActiveField: String, Identifiable {
     case from, to
     var id: String { rawValue }
 }
-
+@MainActor
 final class RouteSelectionViewModel: ObservableObject {
     
     @Published var fromText: String = "Откуда"

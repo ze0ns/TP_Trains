@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import OpenAPIURLSession
 
-// MARK: - ViewModel
+@MainActor
 final class TransporterViewModel: ObservableObject {
     let routeTrains: String
     let fromStations: String
