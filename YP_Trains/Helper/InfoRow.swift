@@ -14,10 +14,10 @@ struct InfoRow: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(.caption)
-                .foregroundColor(.gray)
+                .foregroundStyle(.gray)
             Text(value)
                 .font(.body)
-                .foregroundColor(.black)
+                .foregroundStyle(.black)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

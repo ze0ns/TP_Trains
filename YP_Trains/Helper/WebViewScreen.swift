@@ -17,11 +17,11 @@ struct WebViewScreen: View {
         ZStack {
             WebView(url: url, isLoading: $isLoading)
             
-            if isLoading {
-                ProgressView()
-                    .scaleEffect(1.5)
-                    .progressViewStyle(CircularProgressViewStyle(tint: .ypBlue))
-            }
+            ProgressView()
+                .scaleEffect(1.5)
+                .progressViewStyle(CircularProgressViewStyle(tint: .ypBlue))
+                .opacity(isLoading ? 1.0 : 0.0)
+                .animation(.easeInOut(duration: 0.3), value: isLoading)
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)

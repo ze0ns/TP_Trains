@@ -3,7 +3,8 @@
 //  YP_Trains
 //
 //  Created by Oschepkov Aleksandr on 25.04.2026.
-//
+//  Список станций следования
+
 import Foundation
 
 import OpenAPIRuntime

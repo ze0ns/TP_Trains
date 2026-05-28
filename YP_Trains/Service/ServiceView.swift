@@ -9,6 +9,7 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ServiceView: View {
+    let yaApiKey = Config.shared.getApiKey()
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -18,19 +19,18 @@ struct ServiceView: View {
         }
         .padding()
         .onAppear {
-          //  fetchStations()
+     //       fetchStations(apiKey: yaApiKey)
           //  fetchSearchBetween()
 //            fetchStationSchedule()
-//            fetshAllStations()
 //            fetshCarrierInfoService()
 //            fetshCopyrightInfo()
 //            fetshNearestCityInfo()
-            fetRouteStationsInfo()
+//            fetRouteStationsInfo()
         }
     }
 }
 //MARK: Methods
-func fetchStations() {
+func fetchStations(apiKey: String) {
     Task {
         do {
             
@@ -41,7 +41,7 @@ func fetchStations() {
             
             let service = NearestStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             
             print("Fetching stations...")
@@ -57,7 +57,7 @@ func fetchStations() {
         }
     }
 }
-func fetchSearchBetween() {
+func fetchSearchBetween(apiKey: String) {
     Task {
         do {
             
@@ -68,7 +68,7 @@ func fetchSearchBetween() {
             
             let service = SearchBetweenStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             
             print("Fetching shedule...")
@@ -83,7 +83,7 @@ func fetchSearchBetween() {
         }
     }
 }
-func fetchStationSchedule() {
+func fetchStationSchedule(apiKey: String) {
     Task {
         do {
             
@@ -94,7 +94,7 @@ func fetchStationSchedule() {
             
             let service = StationScheduleService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             
             print("Fetching StaitionShedule...")
@@ -115,29 +115,38 @@ func fetchStationSchedule() {
         }
     }
 }
-func fetshAllStations() {
-    Task {
-        do {
-            
-            let client = Client(
-                serverURL: try Servers.Server1.url(),
-                transport: URLSessionTransport()
-            )
-            
-            let service = AllStationsService(
-                client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
-            )
-            print("Fetching allStations...")
-            let allStations = try await service.getAllStations()
-            print("Successfully fetched allStations: \(allStations)")
-        } catch {
-            print("Error fetching allStations: \(error)")
+
+func extractCities(from model: AllStationModel) -> [CityModel] {
+    
+    // 1. Проходим по всем странам, регионам и достаем населенные пункты (settlements)
+    let allSettlements = model.countries.flatMap { country in
+        country.regions.flatMap { region in
+            region.settlements
         }
     }
+    
+    // 2. Преобразуем Settlement в нашу UI-модель CityModel
+    let cities = allSettlements.map { CityModel(from: $0) }
+    
+    // 3. Удаляем дубликаты (по названию и yandex_code, если они есть)
+    // Часто в API Яндекса один город может встречаться в разных регионах
+    var uniqueCities: [CityModel] = []
+    var seenTitles = Set<String>()
+    
+    for city in cities {
+        // Создаем уникальный ключ из названия и кода
+        let uniqueKey = "\(city.title)_\(city.yandexCode ?? "nil")"
+        
+        if !seenTitles.contains(uniqueKey) {
+            seenTitles.insert(uniqueKey)
+            uniqueCities.append(city)
+        }
+    }
+    
+    // 4. Сортируем по алфавиту для красивого списка
+    return uniqueCities.sorted { $0.title < $1.title }
 }
-
-func fetshCarrierInfoService() {
+func fetshCarrierInfoService(apiKey: String) {
     Task {
         do {
             
@@ -148,7 +157,7 @@ func fetshCarrierInfoService() {
             
             let service = CarrierInfoService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching carrierInfo...")
             let carrierInfo = try await service.getCarrierInfo(code: "tk", system: "iata", lang: "ru_RU")
@@ -158,7 +167,7 @@ func fetshCarrierInfoService() {
         }
     }
 }
-func fetshCopyrightInfo() {
+func fetshCopyrightInfo(apiKey: String) {
     Task {
         do {
             
@@ -169,7 +178,7 @@ func fetshCopyrightInfo() {
             
             let service = CopyrightInfoService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching copyrightInfo...")
             let copyrightInfo = try await service.getCopyrightInfo()
@@ -179,7 +188,7 @@ func fetshCopyrightInfo() {
         }
     }
 }
-func fetshNearestCityInfo() {
+func fetshNearestCityInfo(apiKey: String) {
     Task {
         do {
             
@@ -190,7 +199,7 @@ func fetshNearestCityInfo() {
             
             let service = NearestCityService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching cityServiceInfo...")
             let cityServiceInfo = try await service.getNearestCity(
@@ -204,7 +213,7 @@ func fetshNearestCityInfo() {
         }
     }
 }
-func fetRouteStationsInfo() {
+func fetchRouteStationsInfo(apiKey: String) {
     Task {
         do {
             
@@ -215,7 +224,7 @@ func fetRouteStationsInfo() {
             
             let service = RouteStationsService(
                 client: client,
-                apikey: "7b909b55-e269-4f2b-b30a-44ba9b3f2c3d"
+                apikey: apiKey
             )
             print("Fetching routeInfo...")
             let routeInfo = try await service.getRouteStations(

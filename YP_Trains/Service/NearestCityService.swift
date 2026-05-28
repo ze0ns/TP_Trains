@@ -3,7 +3,7 @@
 //  YP_Trains
 //
 //  Created by Oschepkov Aleksandr on 25.04.2026.
-//
+// Ближайший город
 
 import Foundation
 
