@@ -16,8 +16,8 @@ typealias NearestCityResponse = Components.Schemas.NearestCityResponse
 // MARK: - Nearest City Service
 protocol NearestCityServiceProtocol {
     func getNearestCity(
-        lat: Double,
-        lng: Double,
+        latitude: Double,
+        longitude: Double,
         distance: Int?,
         lang: String?
     ) async throws -> NearestCityResponse
@@ -33,15 +33,15 @@ final class NearestCityService: NearestCityServiceProtocol {
     }
     
     func getNearestCity(
-        lat: Double,
-        lng: Double,
+        latitude: Double,
+        longitude: Double,
         distance: Int? = nil,
         lang: String? = nil
     ) async throws -> NearestCityResponse {
         let response = try await client.getNearestCity(query: .init(
             apikey: apikey,
-            lat: lat,
-            lng: lng,
+            lat: latitude,
+            lng: longitude,
             distance: distance,
             lang: lang,
             format: nil

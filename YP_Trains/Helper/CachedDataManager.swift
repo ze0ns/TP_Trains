@@ -3,17 +3,19 @@
 //  YP_Trains
 //
 //  Created by Oschepkov Aleksandr on 23.05.2026.
-//
-// CachedDataManager.swift
+//  CachedDataManager.swift
+
 import Foundation
 
-class CachedDataManager {
+final class CachedDataManager {
     static let shared = CachedDataManager()
+    
+    private let hour: Double = 24
+    private let minutes: Double = 60
+    private let seconds: Double = 60
     
     private let fileManager = FileManager.default
     private let citiesCacheFileName = "cached_cities.json"
-    
-    private init() {}
     
     // MARK: - Путь к файлу кэша
     private var cacheFileURL: URL {
@@ -21,11 +23,12 @@ class CachedDataManager {
         return cachesDirectory.appendingPathComponent(citiesCacheFileName)
     }
     
+    private init() {}
+    
     // MARK: - Сохранение
     func saveCities(_ cities: [CityModel]) {
         do {
             let data = try JSONEncoder().encode(cities)
-            // Перезаписываем файл в директорию Caches
             try data.write(to: cacheFileURL, options: .atomicWrite)
             print("Cities cached successfully to file")
         } catch {
@@ -51,7 +54,7 @@ class CachedDataManager {
     
     // MARK: - Проверки
     func isDataCached() -> Bool {
-        return fileManager.fileExists(atPath: cacheFileURL.path)
+         fileManager.fileExists(atPath: cacheFileURL.path)
     }
     
     func isCacheFresh() -> Bool {
@@ -60,14 +63,12 @@ class CachedDataManager {
             return false
         }
         
-        // ИСПРАВЛЕНО: 24 часа (1 день) = 86 400 секунд
-        let oneDayInSeconds: Double = 24 * 60 * 60
+        let oneDayInSeconds: Double = hour * minutes * seconds
         let interval = Date().timeIntervalSince(modificationDate)
         
         return interval < oneDayInSeconds
     }
-    
-    // Опционально: метод для очистки кэша, если он устарел
+
     func clearCacheIfNeeded() {
         if isDataCached() && !isCacheFresh() {
             try? fileManager.removeItem(at: cacheFileURL)

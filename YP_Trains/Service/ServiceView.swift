@@ -19,13 +19,7 @@ struct ServiceView: View {
         }
         .padding()
         .onAppear {
-     //       fetchStations(apiKey: yaApiKey)
-          //  fetchSearchBetween()
-//            fetchStationSchedule()
-//            fetshCarrierInfoService()
-//            fetshCopyrightInfo()
-//            fetshNearestCityInfo()
-//            fetRouteStationsInfo()
+            fetshCopyrightInfo(apiKey: yaApiKey)
         }
     }
 }
@@ -203,8 +197,8 @@ func fetshNearestCityInfo(apiKey: String) {
             )
             print("Fetching cityServiceInfo...")
             let cityServiceInfo = try await service.getNearestCity(
-                lat: 50.440046,
-                lng: 40.4882367,
+                        latitude: 50.440046,
+                longitude: 40.4882367,
                 distance: 50,
                 lang: "ru_RU")
             print("Successfully fetched cityServiceInfo: \(cityServiceInfo)")

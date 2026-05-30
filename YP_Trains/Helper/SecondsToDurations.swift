@@ -12,6 +12,11 @@ struct SecondsToDurations {
         let minutes = (seconds % 3600) / 60
         
         func pluralize(_ number: Int, forms: [String]) -> String {
+
+            guard forms.count >= 3 else {
+                return forms.last ?? ""
+            }
+            
             let lastDigit = number % 10
             let lastTwoDigits = number % 100
             

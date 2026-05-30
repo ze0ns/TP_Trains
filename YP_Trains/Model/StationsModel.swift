@@ -19,11 +19,10 @@ struct NearestStationsResponse: Codable {
 struct APIStation: Codable {
     let title: String?
     let codes: APICodes?
-    let lat: Double?
-    let lng: Double?
+    let latitude: Double?
+    let longitude: Double?
 }
 
 struct APICodes: Codable {
     let yandex_code: String?
-    // если есть esr_code, добавьте сюда
 }

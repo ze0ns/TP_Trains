@@ -40,8 +40,8 @@ struct CitySearchView: View {
                         LazyView {
                             StationsSearchView(viewModel: StationsSearchViewModel(
                                 cityName: city.title,
-                                lat: city.lat,
-                                lng: city.lng,
+                                lat: city.latitude,
+                                lng: city.longitude,
                                 onStationSelected: onStationSelected,
                                 onStationSelectedCodes: onStationSelectedCodes
                             ))

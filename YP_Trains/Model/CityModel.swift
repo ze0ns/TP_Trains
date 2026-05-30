@@ -10,15 +10,15 @@ import Foundation
 struct CityModel: Identifiable, Codable {
     let id = UUID()
     let title: String
-    let lat: String
-    let lng: String
-    let yandexCode: String? // Оставляем, он нужен для поиска
+    let latitude: String
+    let longitude: String
+    let yandexCode: String?
     
     // Для создания вручную (если понадобится)
-    init(title: String, lat: String, lng: String, yandexCode: String? = nil) {
+    init(title: String, latitude: String, longitude: String, yandexCode: String? = nil) {
         self.title = title
-        self.lat = lat
-        self.lng = lng
+        self.latitude = latitude
+        self.longitude = longitude
         self.yandexCode = yandexCode
     }
     
@@ -30,12 +30,12 @@ struct CityModel: Identifiable, Codable {
         // Достаем координаты из первой станции в этом населенном пункте,
         // так как у самого Settlement координат в схеме API нет
         if let firstStation = settlement.stations.first {
-            self.lat = CityModel.itudeToString(firstStation.latitude)
-            self.lng = CityModel.itudeToString(firstStation.longitude)
+            self.latitude = CityModel.itudeToString(firstStation.latitude)
+            self.longitude = CityModel.itudeToString(firstStation.longitude)
         } else {
             // Если станций нет, ставим заглушку
-            self.lat = "0.0"
-            self.lng = "0.0"
+            self.latitude = "0.0"
+            self.longitude = "0.0"
         }
     }
     
